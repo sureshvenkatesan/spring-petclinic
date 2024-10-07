@@ -13,7 +13,7 @@ echo " JFROG_NAME: $JFROG_NAME \n JF_RT_URL: $JF_RT_URL \n JFROG_RT_USER: $JFROG
 # MVN 
 ## Config - project
 ### CLI
-export BUILD_NAME="spring-petclinic" BUILD_ID="cmd.mvn.$(date '+%Y-%m-%d-%H-%M')" RT_PROJECT_RB_SIGNING_KEY="krishnam"
+export BUILD_NAME="spring-petclinic" BUILD_ID="cmd.mvn.$(date '+%Y-%m-%d-%H-%M')" 
 
 ### Jenkins
 # export BUILD_NAME=${env.JOB_NAME} BUILD_ID=${env.BUILD_ID} 

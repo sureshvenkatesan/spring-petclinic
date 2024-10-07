@@ -12,19 +12,25 @@ Note: This process with not deploy to the envionrmnet platform.
 
 
 ## Pipeline: GitHub Actions
+### Maven
+- [![JF-CLI with MVN](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn.yml)
+### Gradle
+- [![JF-CLI with Gradle](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-gradle.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-gradle.yml)
 
 ## Shell scripts
+### Maven
 - JF-CLI with Maven [jf-cli-mvn.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-mvn.sh)
 - JF-CLI with Maven + Xray [jf-cli-mvn-xray.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-mvn-xray.sh)
+### Gradle
+- JF-CLI with Gradle [jf-cli-gradle.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-gradle.sh)
+- JF-CLI with Gradle + Xray [jf-cli-gradle-xray.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-gradle-xray.sh)
 
 
 ## Pipeline: Jenkins
-
 ### MAVEN  
 <img src="./cipipeline.svg">
 - [pipeline file: Jenkins](./Jenkinsfile)
 - [![Walk through demo](https://img.youtube.com/vi/zgiaPIp-ZZA/0.jpg)](https://www.youtube.com/watch?v=zgiaPIp-ZZA)
-
 
 
 

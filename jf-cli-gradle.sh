@@ -10,20 +10,20 @@ export RT_REPO_VIRTUAL="krishnam-gradle-virtual"
 
 echo " JFROG_NAME: $JFROG_NAME \n JF_RT_URL: $JF_RT_URL \n JFROG_RT_USER: $JFROG_RT_USER \n JFROG_CLI_LOG_LEVEL: $JFROG_CLI_LOG_LEVEL \n "
 
-# MVN 
+# Gradle 
 ## Config - project
 ### CLI
-export BUILD_NAME="spring-petclinic" BUILD_ID="cmd.gdl.$(date '+%Y-%m-%d-%H-%M')" PACKAGE_CATEGORY="WEBAPP" RT_PROJECT_RB_SIGNING_KEY="krishnam"
+export BUILD_NAME="spring-petclinic" BUILD_ID="cmd.gdl.$(date '+%Y-%m-%d-%H-%M')"
 
 ### Jenkins
-# export BUILD_NAME=${env.JOB_NAME} BUILD_ID=${env.BUILD_ID} PACKAGE_CATEGORY="WEBAPP"
+# export BUILD_NAME=${env.JOB_NAME} BUILD_ID=${env.BUILD_ID}
 # References: 
 # https://www.jenkins.io/doc/book/pipeline/jenkinsfile/#using-environment-variables 
 # https://wiki.jenkins.io/JENKINS/Building+a+software+project 
 
 echo " BUILD_NAME: $BUILD_NAME \n BUILD_ID: $BUILD_ID \n JFROG_CLI_LOG_LEVEL: $JFROG_CLI_LOG_LEVEL  \n RT_PROJECT_REPO: $RT_PROJECT_REPO  \n "
 
-jf gradlec --server-id-resolve ${JFROG_NAME} --server-id-deploy ${JFROG_NAME} --repo-deploy ${RT_REPO_VIRTUAL} --repo-resolve ${RT_REPO_VIRTUAL} --repo-deploy ${RT_REPO_VIRTUAL}
+jf gradlec --global --repo-deploy ${RT_REPO_VIRTUAL} --repo-resolve ${RT_REPO_VIRTUAL} 
 
 ## Create Build
 echo "\n\n**** Gradle: Package ****\n\n" # --scan=true
