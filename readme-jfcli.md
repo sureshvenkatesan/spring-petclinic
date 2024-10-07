@@ -1,0 +1,47 @@
+# Spring PetClinic Sample Application using JFrog CLI
+
+## Prerequisites
+- Read and understand the PetClinic application original documentation: [ReadME.MD](readme-original.md)
+- Read and understand the PetClinic application jenkins pipeline documentation: [ReadME.MD](readme.md)
+
+## Objective
+Develop a DevOps pipeline to automate tasks such as code compile, unit testing, creation of container, and upload of artifacts to a repository. This will streamline the software development process using JFrog CLI.
+
+Note: This process with not deploy to the envionrmnet platform. 
+
+
+
+## Pipeline: GitHub Actions
+
+## Shell scripts
+- JF-CLI with Maven [jf-cli-mvn.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-mvn.sh)
+- JF-CLI with Maven + Xray [jf-cli-mvn-xray.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-mvn-xray.sh)
+
+
+## Pipeline: Jenkins
+
+### MAVEN  
+<img src="./cipipeline.svg">
+- [pipeline file: Jenkins](./Jenkinsfile)
+- [![Walk through demo](https://img.youtube.com/vi/zgiaPIp-ZZA/0.jpg)](https://www.youtube.com/watch?v=zgiaPIp-ZZA)
+
+
+
+
+#### Error solutions
+- <details><summary>Error: Exchanging JSON web token with an access token failed: getaddrinfo EAI_AGAIN access</summary>
+    It is possbile that JF_RT_URL might be a NULL value. Ref [https://github.com/krishnamanchikalapudi/spring-petclinic/actions/runs/10892482444](https://github.com/krishnamanchikalapudi/spring-petclinic/actions/runs/10892482444)
+</details>
+- <details><summary>Error: </summary>
+</details>
+
+
+
+## LAST UMCOMMIT
+`````
+git reset --hard HEAD~1
+git push origin -f
+`````
+
+## License
+The Spring PetClinic sample application is released under version 2.0 of the [Apache License](https://www.apache.org/licenses/LICENSE-2.0).
