@@ -1,7 +1,7 @@
 # This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-name: JF-CLI with Gradle
+name: JF-CLI with Gradle and Xray
 on:
 # TURN-OFF on every push 
   push:
@@ -47,7 +47,7 @@ jobs:
       JOB_SUMMARY: false
       JFROG_CLI_LOG_LEVEL: ${{vars.JFROG_CLI_LOG_LEVEL}} # DEBUG, INFO, WARN, ERROR
       BUILD_NAME: 'spring-petclinic'
-      BUILD_ID: "ga-gdl-${{ github.run_number }}" # ref: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#github-context
+      BUILD_ID: "ga-gdl-xray-${{ github.run_number }}" # ref: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#github-context
     runs-on: ${{ matrix.os }}
     steps:
       # Use the specific setup-cli branch. Ref https://github.com/marketplace/actions/setup-jfrog-cli
@@ -122,9 +122,17 @@ jobs:
           echo " - Installed JFrog CLI [${jfcliv}](https://jfrog.com/getcli/) and Java [${{ env.JAVA_PROVIDER }}](https://github.com/actions/setup-java) v${{ env.JAVA_VERSION }} " >> $GITHUB_STEP_SUMMARY
           echo " - Configured the JFrog Cli with SaaS Artifactory OIDC integration  " >> $GITHUB_STEP_SUMMARY
 # Package
+      - name: Xray Audit
+        run: |
+          jf audit --gradle --extended-table=true
+
       - name: Create Build
         run: |
           jf gradle clean artifactoryPublish -x test -b ./build.gradle --build-name=${{ env.BUILD_NAME}} --build-number=${{ env.BUILD_ID}} 
+
+      - name: Xray scan
+        run: |
+          jf scan . --extended-table=true --format=simple-json 
 
       - name: build publish env vars   # These properties were captured in Builds >> spring-petclinic >> version >> Environment tab
         run: |
@@ -146,6 +154,10 @@ jobs:
 
       - name: Build Publish
         run: jf rt bp ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} --detailed-summary=true
+
+      - name: Xray build scan
+        run: |
+          jf bs ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} --rescan=true --format=table --extended-table=true --vuln=true --fail=false
 
 # Set properties      
       - name: Set properties # These properties were captured Artifacts >> repo path 'spring-petclinic.---.jar' >> Properties
