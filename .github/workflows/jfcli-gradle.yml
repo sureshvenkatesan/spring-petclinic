@@ -29,7 +29,7 @@ permissions:
   contents: read
   security-events: write # Required for uploading code scanning.
 jobs:
-  gradlepackage:
+  gradlePackage:
     name: Gradle Package
     strategy:
       fail-fast: false

@@ -5,12 +5,17 @@ clear
 # jf c add --user=krishnam --interactive=true --url=https://psazuse.jfrog.io --overwrite=true 
 
 # Config - Artifactory info
-export JF_RT_URL="https://psazuse.jfrog.io" JFROG_NAME="psazuse" JFROG_RT_USER="krishnam" JFROG_CLI_LOG_LEVEL="DEBUG" # JF_ACCESS_TOKEN="<GET_YOUR_OWN_KEY>"
+export JF_HOST="psazuse.jfrog.io"  JFROG_RT_USER="krishnam" JFROG_CLI_LOG_LEVEL="DEBUG" # JF_ACCESS_TOKEN="<GET_YOUR_OWN_KEY>"
+export JF_RT_URL="https://${JF_HOST}"
+
 export RT_REPO_VIRTUAL="krishnam-gradle-virtual"
 
-echo " JFROG_NAME: $JFROG_NAME \n JF_RT_URL: $JF_RT_URL \n JFROG_RT_USER: $JFROG_RT_USER \n JFROG_CLI_LOG_LEVEL: $JFROG_CLI_LOG_LEVEL \n "
+echo "JF_RT_URL: $JF_RT_URL \n JFROG_RT_USER: $JFROG_RT_USER \n JFROG_CLI_LOG_LEVEL: $JFROG_CLI_LOG_LEVEL \n "
 
-# MVN 
+## Health check
+jf rt ping --url=${JF_RT_URL}/artifactory
+
+# Gradle 
 ## Config - project
 ### CLI
 export BUILD_NAME="spring-petclinic" BUILD_ID="cmd.gdl.xray.$(date '+%Y-%m-%d-%H-%M')" 
@@ -36,7 +41,7 @@ jf gradle clean artifactoryPublish -x test -b ./build.gradle --build-name=${BUIL
 
 ## XRAY scan packages   ref# https://docs.jfrog-applications.jfrog.io/jfrog-applications/jfrog-cli/cli-for-jfrog-security/scan-your-binaries
 echo "\n\n**** [XRAY] scan ****" 
-jf scan . --extended-table=true --format=simple-json --server-id=${JFROG_NAME}
+jf scan . --extended-table=true --format=simple-json 
 
 # setting build properties
 export e_env="e_demo" e_org="e_ps" e_team="e_arch" e_build="gradle" e_job="cmd" # These properties were captured in Builds >> spring-petclinic >> version >> Environment tab
@@ -61,7 +66,7 @@ jf bs ${BUILD_NAME} ${BUILD_ID} --rescan=true --format=table --extended-table=tr
 
 ## XRAY sbom enrich    ref# https://docs.jfrog-applications.jfrog.io/jfrog-applications/jfrog-cli/cli-for-jfrog-security/enrich-your-sbom
 echo "\n\n**** [XRAY] sbom enrich ****"
-jf se "build/repots/application.cdx.json"
+jf se "build/resources/main/META-INF/sbom/application.cdx.json"
 
 
 # set-props

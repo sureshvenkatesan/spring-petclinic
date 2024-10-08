@@ -14,15 +14,20 @@ Note: This process with not deploy to the envionrmnet platform.
 ## Pipeline: GitHub Actions
 ### Maven
 - [![JF-CLI with MVN](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn.yml)
-- 
+- [![JF-CLI with Maven and Xray](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-xray.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-xray.yml)
+- [![JF-CLI with Maven and Docker](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-docker.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-docker.yml)
+- [![JF-CLI with Maven, Docker, and Xray](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-docker-xray.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-docker-xray.yml)
+
 ### Gradle
 - [![JF-CLI with Gradle](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-gradle.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-gradle.yml)
-- 
+- [![JF-CLI with Gradle and Xray](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-gradle-xray.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-gradle-xray.yml)
 
 ## Shell scripts
 ### Maven
 - JF-CLI with Maven [jf-cli-mvn.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-mvn.sh)
 - JF-CLI with Maven + Xray [jf-cli-mvn-xray.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-mvn-xray.sh)
+- JF-CLI with Maven + Docker [jf-cli-mvn-docker.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-mvn-docker.sh)
+- JF-CLI with Maven + Docker + Xray [jf-cli-mvn-docker-xray.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-mvn-docker-xray.sh)
 ### Gradle
 - JF-CLI with Gradle [jf-cli-gradle.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-gradle.sh)
 - JF-CLI with Gradle + Xray [jf-cli-gradle-xray.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-gradle-xray.sh)

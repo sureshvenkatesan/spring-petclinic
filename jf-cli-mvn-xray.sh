@@ -5,11 +5,14 @@ clear
 # jf c add --user=krishnam --interactive=true --url=https://psazuse.jfrog.io --overwrite=true 
 
 # Config - Artifactory info
-export JF_RT_URL="https://psazuse.jfrog.io" JFROG_NAME="psazuse" JFROG_RT_USER="krishnam" JFROG_CLI_LOG_LEVEL="DEBUG" # JF_ACCESS_TOKEN="<GET_YOUR_OWN_KEY>"
+export JF_HOST="psazuse.jfrog.io"  JFROG_RT_USER="krishnam" JFROG_CLI_LOG_LEVEL="DEBUG" # JF_ACCESS_TOKEN="<GET_YOUR_OWN_KEY>"
+export JF_RT_URL="https://${JF_HOST}"
 export RT_REPO_VIRTUAL="krishnam-mvn-virtual"
 
-echo " JFROG_NAME: $JFROG_NAME \n JF_RT_URL: $JF_RT_URL \n JFROG_RT_USER: $JFROG_RT_USER \n JFROG_CLI_LOG_LEVEL: $JFROG_CLI_LOG_LEVEL \n "
+echo "JF_RT_URL: $JF_RT_URL \n JFROG_RT_USER: $JFROG_RT_USER \n JFROG_CLI_LOG_LEVEL: $JFROG_CLI_LOG_LEVEL \n "
 
+## Health check
+jf rt ping --url=${JF_RT_URL}/artifactory
 
 # MVN 
 ## Config - project
@@ -36,7 +39,7 @@ jf mvn clean install -DskipTests=true --build-name=${BUILD_NAME} --build-number=
 
 ## XRAY scan packages    ref# https://docs.jfrog-applications.jfrog.io/jfrog-applications/jfrog-cli/cli-for-jfrog-security/scan-your-binaries
 echo "\n\n**** [XRAY] scan ****"
-jf scan . --extended-table=true --format=simple-json --server-id=${JFROG_NAME}
+jf scan . --extended-table=true --format=simple-json 
 
 # setting build properties
 export e_env="e_demo" e_org="e_ps" e_team="e_arch" e_build="maven" e_job="cmd" # These properties were captured in Builds >> spring-petclinic >> version >> Environment tab

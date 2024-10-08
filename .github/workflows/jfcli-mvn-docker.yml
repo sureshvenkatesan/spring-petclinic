@@ -1,7 +1,4 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
-name: JF-CLI with Maven and Xray
+name: JF-CLI with Maven and Docker
 on:
 # TURN-OFF on every push 
   push:
@@ -29,8 +26,8 @@ permissions:
   contents: read
   security-events: write # Required for uploading code scanning.
 jobs:
-  mvnXray:
-    name: MVN + Xray
+  mvnDocker:
+    name: MVN + Docker
     strategy:
       fail-fast: false
       matrix:
@@ -43,11 +40,14 @@ jobs:
       JAVA_PROVIDER: 'corretto'
       JAVA_VERSION: '17'
       JF_RT_URL: https://${{ vars.JF_NAME }}.jfrog.io
-      RT_REPO_MVN_VIRTUAL: 'krishnam-mvn-virtual'
+      RT_MVN_REPO_VIRTUAL: 'krishnam-mvn-virtual'
+      RT_DOCKER_REPO_VIRTUAL: 'krishnam-docker-virtual'
+      DOCKER_BUILDX_PLATFORMS: 'linux/amd64,linux/arm64'
+      DOCKER_METADATA_JSON: 'metadata.json'
       JOB_SUMMARY: false
-      JFROG_CLI_LOG_LEVEL: ${{vars.JFROG_CLI_LOG_LEVEL}} # DEBUG, INFO, WARN, ERROR
+      JFROG_CLI_LOG_LEVEL: ${{vars.JFROG_CLI_LOG_LEVEL}}  # DEBUG, INFO, WARN, ERROR
       BUILD_NAME: 'spring-petclinic'
-      BUILD_ID: "ga-mvn-xray-${{ github.run_number }}" # ref: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#github-context
+      BUILD_ID: "ga-mvn-dkr${{ github.run_number }}" # ref: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#github-context
     runs-on: ${{ matrix.os }}
     steps:
       # Use the specific setup-cli branch. Ref https://github.com/marketplace/actions/setup-jfrog-cli
@@ -56,12 +56,13 @@ jobs:
         id: setup-cli
         env:
           JF_URL: ${{env.JF_RT_URL}}
-          JFROG_CLI_RELEASES_REPO: '${{ env.JF_RT_URL }}/artifactory/${{ env.RT_REPO_MVN_VIRTUAL}}' 
-          JFROG_CLI_EXTRACTORS_REMOTE: '${{ env.JF_RT_URL }}/artifactory/${{ env.RT_REPO_MVN_VIRTUAL}}'
+          JFROG_CLI_RELEASES_REPO: '${{ env.JF_RT_URL }}/artifactory/${{ env.RT_MVN_REPO_VIRTUAL}}' 
+          JFROG_CLI_EXTRACTORS_REMOTE: '${{ env.JF_RT_URL }}/artifactory/${{ env.RT_MVN_REPO_VIRTUAL}}'
           JF_GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           oidc-provider-name: ${{ vars.JF_OIDC_PROVIDER_NAME }}
           disable-job-summary: ${{env.JOB_SUMMARY}}
+          disable-auto-build-publish: ${{env.JOB_SUMMARY}}
 
       - name: Clone VCS
         uses: actions/checkout@v4 # ref: https://github.com/actions/checkout
@@ -97,72 +98,69 @@ jobs:
           export JFROG_CLI_LOG_LEVEL=${{ env.JFROG_CLI_LOG_LEVEL }}
           export JFROG_CLI_LOG_TIMESTAMP=DATE_AND_TIME
 
-          jf mvnc --repo-resolve-releases ${{ env.RT_REPO_MVN_VIRTUAL}} --repo-resolve-snapshots ${{ env.RT_REPO_MVN_VIRTUAL}} --repo-deploy-releases ${{ env.RT_REPO_MVN_VIRTUAL}} --repo-deploy-snapshots ${{ env.RT_REPO_MVN_VIRTUAL}}
+          jf mvnc --repo-resolve-releases ${{ env.RT_MVN_REPO_VIRTUAL}} --repo-resolve-snapshots ${{ env.RT_MVN_REPO_VIRTUAL}} --repo-deploy-releases ${{ env.RT_MVN_REPO_VIRTUAL}} --repo-deploy-snapshots ${{ env.RT_MVN_REPO_VIRTUAL}}
 
-      - name: list folder
-        run: |
-          pwd
+          echo ""
           ls -lrta /home/runner/work/spring-petclinic/spring-petclinic
+          pwd
 
-          echo "OIDC_PROVIDER_NAME = ${{ vars.JF_OIDC_PROVIDER_NAME }}"
-          echo "GITHUB_REPOSITORY = $GITHUB_REPOSITORY"
-          echo "GITHUB_SHA = $GITHUB_SHA"
-          echo "GITHUB_REPOSITORY_ID = $GITHUB_REPOSITORY_ID"
+      - name: Docker authentication  # ref https://github.com/marketplace/actions/docker-login
+        id: config-docker
+        uses: docker/login-action@v3
+        with: 
+          registry: ${{env.JF_RT_URL}}
+          username: ${{ steps.setup-cli.outputs.oidc-user }}
+          password: ${{ steps.setup-cli.outputs.oidc-token }}
 
-          cd /home/runner/work/spring-petclinic/spring-petclinic
+      - name: Docker buildx instance
+        uses: docker/setup-buildx-action@v3   # ref: https://github.com/marketplace/actions/docker-setup-buildx h
+        with:
+          use: true
+          platforms: ${{env.DOCKER_BUILDX_PLATFORMS}} # linux/amd64,linux/arm64 # ref: https://docs.docker.com/reference/cli/docker/buildx/create/#platform
+          install: true
 
       - name: prestep-summary
         run: |
           jfcliv=`jf --version`
+          jfdcliv=`docker -v`
           echo "# :frog: Prestep Summary :pushpin:" >> $GITHUB_STEP_SUMMARY
           echo " " >> $GITHUB_STEP_SUMMARY
           echo " " >> $GITHUB_STEP_SUMMARY
           echo " - Installed JFrog CLI [${jfcliv}](https://jfrog.com/getcli/) and Java [${{ env.JAVA_PROVIDER }}](https://github.com/actions/setup-java) v${{ env.JAVA_VERSION }} " >> $GITHUB_STEP_SUMMARY
-          echo " - Configured the JFrog Cli with SaaS Artifactory OIDC integration  " >> $GITHUB_STEP_SUMMARY
+          echo " - Installed ${jfdcliv} " >> $GITHUB_STEP_SUMMARY
+          echo " - Configured the JFrog Cli and Docker login with SaaS Artifactory OIDC integration  " >> $GITHUB_STEP_SUMMARY
+          echo " - Docker buildx configured with platforms: [${{env.DOCKER_BUILDX_PLATFORMS}}](https://docs.docker.com/reference/cli/docker/buildx/create/#platform) " >> $GITHUB_STEP_SUMMARY
+          echo " " >> $GITHUB_STEP_SUMMARY
 # Package
-      - name: Xray Audit
-        run: |
-          jf audit --mvn --extended-table=true
       - name: Create Build
         run: |
           jf mvn clean install -DskipTests=true --build-name=${{ env.BUILD_NAME}} --build-number=${{ env.BUILD_ID}} --detailed-summary=true 
 
-      - name: Xray scan
+      - name: Docker image
         run: |
-          jf scan . --extended-table=true --format=simple-json 
+          docker image build -f Dockerfile-cli -t ${{ vars.JF_NAME }}.jfrog.io/${{env.RT_DOCKER_REPO_VIRTUAL}}/${{ env.BUILD_NAME }}:${{ env.BUILD_ID}} --platform "${{env.DOCKER_BUILDX_PLATFORMS}}" --metadata-file "${{env.DOCKER_METADATA_JSON}}" --push .
 
-      - name: build publish env vars   # These properties were captured in Builds >> spring-petclinic >> version >> Environment tab
+      - name: Docker image list
         run: |
-          export e_env="e_demo" e_org="e_ps" e_team="e_arch" e_build="maven" e_job="github-action"
-
+          docker image ls
+      
  # Build Info
-    # Executive Order: 
-    #       https://www.whitehouse.gov/briefing-room/presidential-actions/2021/05/12/executive-order-on-improving-the-nations-cybersecurity/
-    #       https://www.nist.gov/itl/executive-order-14028-improving-nations-cybersecurity
     # US Dept of Commerce: https://www.ntia.gov/page/software-bill-materials
     # US Cyber Defence Agency: https://www.cisa.gov/sbom
-    # NIST: https://www.nist.gov/itl/executive-order-14028-improving-nations-cybersecurity/software-security-supply-chains-software-1
+    #  NIST: https://www.nist.gov/itl/executive-order-14028-improving-nations-cybersecurity/software-security-supply-chains-software-1
       - name: Collect env
         run: jf rt bce ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} 
  
       - name: Add VCS info
         run: jf rt bag ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} 
 
+      - name: Docker build create  
+        run: |
+          imageDigest=$(cat "${{env.DOCKER_METADATA_JSON}}" | jq '.["containerimage.digest"]')
+          # echo "${imageDigest}"
+          echo "${{ vars.JF_NAME }}.jfrog.io/${{env.RT_DOCKER_REPO_VIRTUAL}}/${{env.BUILD_NAME }}:${{ env.BUILD_ID}}@${imageDigest}" > ${{env.DOCKER_METADATA_JSON}}
+
+          jf rt bdc ${{env.RT_DOCKER_REPO_VIRTUAL}} --image-file ${{env.DOCKER_METADATA_JSON}} --build-name=${{ env.BUILD_NAME }} --build-number=${{ env.BUILD_ID}}
+
       - name: Build Publish
         run: jf rt bp ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} --detailed-summary=true
-
-      - name: Xray build scan
-        run: |
-          jf bs ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} --rescan=true --format=table --extended-table=true --vuln=true --fail=false
-
-      - name: Xray sbom-enrich # ref https://docs.jfrog-applications.jfrog.io/jfrog-applications/jfrog-cli/cli-for-jfrog-security/enrich-your-sbom
-        run: |
-          jf se "target/classes/META-INF/sbom/application.cdx.json" 
-
-
-# Set properties      
-      - name: Set properties # These properties were captured Artifacts >> repo path 'spring-petclinic.---.jar' >> Properties
-        run: |
-          ts="cmd.$(date '+%Y-%m-%d-%H-%M')" 
-          jf rt sp "job=github-action;senv=demo;org=ps;team=arch;pack_cat=webapp;build=maven;ts=ts-${BUILD_ID}" --build="${{ env.BUILD_NAME}}/${{ env.BUILD_ID}}"
-
