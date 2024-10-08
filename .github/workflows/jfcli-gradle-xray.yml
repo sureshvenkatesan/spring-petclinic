@@ -136,7 +136,7 @@ jobs:
 
       - name: build publish env vars   # These properties were captured in Builds >> spring-petclinic >> version >> Environment tab
         run: |
-          export e_env="e_demo" e_org="e_ps" e_team="e_arch" e_build="gradle" e_job="github-action"
+          export e_env="e_demo" e_org="e_ps" e_team="e_arch" e_build="gradle" e_job="github-action" e_product="artifactory,xray" e_features="package,buildinfo"
 
  # Build Info
     # Executive Order: 
@@ -167,5 +167,5 @@ jobs:
       - name: Set properties # These properties were captured Artifacts >> repo path 'spring-petclinic.---.jar' >> Properties
         run: |
           ts="cmd.$(date '+%Y-%m-%d-%H-%M')" 
-          jf rt sp "job=github-action;senv=demo;org=ps;team=arch;pack_cat=webapp;build=gradle;ts=ts-${BUILD_ID}" --build="${{ env.BUILD_NAME}}/${{ env.BUILD_ID}}"
+          jf rt sp "job=github-action;env=demo;org=ps;team=arch;pack_cat=webapp;build=gradle;product=artifactory,xray;ts=ts-${BUILD_ID}" --build="${{ env.BUILD_NAME}}/${{ env.BUILD_ID}}"
 

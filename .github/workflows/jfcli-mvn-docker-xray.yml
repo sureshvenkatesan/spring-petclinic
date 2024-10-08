@@ -156,6 +156,10 @@ jobs:
         run: |
           jf docker scan ${{ vars.JF_NAME }}.jfrog.io/${{env.RT_DOCKER_REPO_VIRTUAL}}/${{ env.BUILD_NAME }}:${{ env.BUILD_ID}} --build-name ${{ env.BUILD_NAME }} --build-number ${{ env.BUILD_ID}} --extended-table=true --format=simple-json --detailed-summary=true --licenses=true --vuln=true
 
+      - name: build publish env vars   # These properties were captured in Builds >> spring-petclinic >> version >> Environment tab
+        run: |
+          export e_env="e_demo" e_org="e_ps" e_team="e_arch" e_build="maven" e_job="github-action" e_product="artifactory,xray" e_features="package,docker,buildinfo"
+
  # Build Info
     # US Dept of Commerce: https://www.ntia.gov/page/software-bill-materials
     # US Cyber Defence Agency: https://www.cisa.gov/sbom
@@ -180,3 +184,9 @@ jobs:
       - name: Xray build scan
         run: |
           jf bs ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} --rescan=true --format=table --extended-table=true --vuln=true --fail=false
+
+# Set properties      
+      - name: Set properties # These properties were captured Artifacts >> repo path 'spring-petclinic.---.jar' >> Properties
+        run: |
+          ts="cmd.$(date '+%Y-%m-%d-%H-%M')" 
+          jf rt sp "job=github-action;env=demo;org=ps;team=arch;pack_cat=webapp;build=maven;product=artifactory,xray;features=package,docker,buildinfo;ts=ts-${BUILD_ID}" --build="${{ env.BUILD_NAME}}/${{ env.BUILD_ID}}"

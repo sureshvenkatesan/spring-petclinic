@@ -143,7 +143,11 @@ jobs:
       - name: Docker image list
         run: |
           docker image ls
-      
+
+      - name: build publish env vars   # These properties were captured in Builds >> spring-petclinic >> version >> Environment tab
+        run: |
+          export e_env="e_demo" e_org="e_ps" e_team="e_arch" e_build="maven" e_job="github-action" e_product="artifactory" e_features="package,docker,buildinfo"
+
  # Build Info
     # US Dept of Commerce: https://www.ntia.gov/page/software-bill-materials
     # US Cyber Defence Agency: https://www.cisa.gov/sbom
@@ -164,3 +168,9 @@ jobs:
 
       - name: Build Publish
         run: jf rt bp ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} --detailed-summary=true
+
+# Set properties      
+      - name: Set properties # These properties were captured Artifacts >> repo path 'spring-petclinic.---.jar' >> Properties
+        run: |
+          ts="cmd.$(date '+%Y-%m-%d-%H-%M')" 
+          jf rt sp "job=github-action;env=demo;org=ps;team=arch;pack_cat=webapp;build=maven;product=artifactory;features=package,docker,buildinfo;ts=ts-${BUILD_ID}" --build="${{ env.BUILD_NAME}}/${{ env.BUILD_ID}}"
