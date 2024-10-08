@@ -29,7 +29,7 @@ permissions:
   contents: read
   security-events: write # Required for uploading code scanning.
 jobs:
-  gradleXray:
+  gradleXrayPack:
     name: Gradle + Xray
     strategy:
       fail-fast: false
