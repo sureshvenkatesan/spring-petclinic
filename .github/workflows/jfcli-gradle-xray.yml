@@ -29,7 +29,7 @@ permissions:
   contents: read
   security-events: write # Required for uploading code scanning.
 jobs:
-  gradleXrayPack:
+  gradleXray:
     name: Gradle + Xray
     strategy:
       fail-fast: false
@@ -159,7 +159,7 @@ jobs:
         run: |
           jf bs ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} --rescan=true --format=table --extended-table=true --vuln=true --fail=false
 
-     - name: Xray sbom-enrich # ref https://docs.jfrog-applications.jfrog.io/jfrog-applications/jfrog-cli/cli-for-jfrog-security/enrich-your-sbom
+      - name: Xray sbom-enrich # ref https://docs.jfrog-applications.jfrog.io/jfrog-applications/jfrog-cli/cli-for-jfrog-security/enrich-your-sbom
         run: |
           jf se "build/resources/main/META-INF/sbom/application.cdx.json"
 

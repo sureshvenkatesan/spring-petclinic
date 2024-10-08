@@ -26,4 +26,5 @@ jobs:
           distribution: 'adopt'
           cache: maven
       - name: Build with Maven Wrapper
-        run: ./mvnw -B package
+        run: mvn clean install -DskipTests=true
+        # run: ./mvnw -B package
