@@ -97,7 +97,7 @@ jobs:
           export JFROG_CLI_LOG_LEVEL=${{ env.JFROG_CLI_LOG_LEVEL }}
           export JFROG_CLI_LOG_TIMESTAMP=DATE_AND_TIME
 
-          jf mvnc --repo-resolve-releases ${{ env.RT_REPO_MVN_VIRTUAL}} --repo-resolve-snapshots ${{ env.RT_REPO_MVN_VIRTUAL}} --repo-deploy-releases ${{ env.RT_REPO_MVN_VIRTUAL}} --repo-deploy-snapshots ${{ env.RT_REPO_MVN_VIRTUAL}}
+          jf mvnc --global --repo-resolve-releases ${{ env.RT_REPO_MVN_VIRTUAL}} --repo-resolve-snapshots ${{ env.RT_REPO_MVN_VIRTUAL}}
 
       - name: list folder
         run: |
@@ -165,5 +165,5 @@ jobs:
       - name: Set properties # These properties were captured Artifacts >> repo path 'spring-petclinic.---.jar' >> Properties
         run: |
           ts="cmd.$(date '+%Y-%m-%d-%H-%M')" 
-          jf rt sp "job=github-action;senv=demo;org=ps;team=arch;pack_cat=webapp;build=maven;product=artifactory,xray;features=package,buildinfo;ts=ts-${BUILD_ID}" --build="${{ env.BUILD_NAME}}/${{ env.BUILD_ID}}"
+          jf rt sp "job=github-action;env=demo;org=ps;team=arch;pack_cat=webapp;build=maven;product=artifactory,xray;features=package,buildinfo;ts=ts-${BUILD_ID}" --build="${{ env.BUILD_NAME}}/${{ env.BUILD_ID}}"
 

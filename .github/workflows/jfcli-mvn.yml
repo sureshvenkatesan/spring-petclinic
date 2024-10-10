@@ -97,7 +97,7 @@ jobs:
           export JFROG_CLI_LOG_LEVEL=${{ env.JFROG_CLI_LOG_LEVEL }}
           export JFROG_CLI_LOG_TIMESTAMP=DATE_AND_TIME
 
-          jf mvnc --repo-resolve-releases ${{ env.RT_REPO_MVN_VIRTUAL}} --repo-resolve-snapshots ${{ env.RT_REPO_MVN_VIRTUAL}} --repo-deploy-releases ${{ env.RT_REPO_MVN_VIRTUAL}} --repo-deploy-snapshots ${{ env.RT_REPO_MVN_VIRTUAL}}
+          jf mvnc --global --repo-resolve-releases ${{ env.RT_REPO_MVN_VIRTUAL}} --repo-resolve-snapshots ${{ env.RT_REPO_MVN_VIRTUAL}}
 
       - name: list folder
         run: |

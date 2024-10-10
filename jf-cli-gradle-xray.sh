@@ -65,6 +65,7 @@ echo "\n\n**** [XRAY] build scan ****"
 jf bs ${BUILD_NAME} ${BUILD_ID} --rescan=true --format=table --extended-table=true --vuln=true --fail=false
 
 ## XRAY sbom enrich    ref# https://docs.jfrog-applications.jfrog.io/jfrog-applications/jfrog-cli/cli-for-jfrog-security/enrich-your-sbom
+# find . -iname "*.cdx.json"      
 echo "\n\n**** [XRAY] sbom enrich ****"
 jf se "build/resources/main/META-INF/sbom/application.cdx.json"
 

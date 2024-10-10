@@ -58,7 +58,7 @@ jobs:
           jf config show
           pwd
 
-      - name: Query properties by '$QUERY_VAR'
+      - name: NPM - Query properties by '$QUERY_VAR'
         env:
           QUERY_VAR: "team=arch"
           FILE_NAME: "QueryByTeam.json"
@@ -74,7 +74,7 @@ jobs:
           cat $FILE_NAME >> $GITHUB_STEP_SUMMARY
           echo " " >> $GITHUB_STEP_SUMMARY
 
-      - name: Query properties by '$QUERY_VAR'
+      - name: NPM - Query properties by '$QUERY_VAR'
         env:
           QUERY_VAR: "team=arch&env=demo"
           FILE_NAME: "QueryByTeamEnv.json"
