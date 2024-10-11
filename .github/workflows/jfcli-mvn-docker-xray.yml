@@ -49,6 +49,7 @@ jobs:
       BUILD_NAME: 'spring-petclinic'
       BUILD_ID: "ga-mvn-dkr${{ github.run_number }}" # ref: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#github-context
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 20   # ref  https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idtimeout-minutes
     steps:
       # Use the specific setup-cli branch. Ref https://github.com/marketplace/actions/setup-jfrog-cli
       - name: Setup JFrog CLI
@@ -133,6 +134,7 @@ jobs:
           echo " " >> $GITHUB_STEP_SUMMARY
 # Package
       - name: Xray Audit
+        timeout-minutes: 10    # ref https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idstepstimeout-minutes
         run: |
           jf audit --mvn --extended-table=true
           
@@ -141,6 +143,7 @@ jobs:
           jf mvn clean install -DskipTests=true --build-name=${{ env.BUILD_NAME}} --build-number=${{ env.BUILD_ID}} --detailed-summary=true 
 
       - name: Xray scan
+        timeout-minutes: 10    # ref https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idstepstimeout-minutes
         run: |
           jf scan . --extended-table=true --format=simple-json 
 
@@ -153,6 +156,7 @@ jobs:
           docker image ls
 
       - name: Xray docker scan
+        timeout-minutes: 10    # ref https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idstepstimeout-minutes
         run: |
           jf docker scan ${{ vars.JF_NAME }}.jfrog.io/${{env.RT_DOCKER_REPO_VIRTUAL}}/${{ env.BUILD_NAME }}:${{ env.BUILD_ID}} --build-name ${{ env.BUILD_NAME }} --build-number ${{ env.BUILD_ID}} --extended-table=true --format=simple-json --detailed-summary=true --licenses=true --vuln=true
 
@@ -182,6 +186,7 @@ jobs:
         run: jf rt bp ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} --detailed-summary=true
 
       - name: Xray build scan
+        timeout-minutes: 10    # ref https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idstepstimeout-minutes
         run: |
           jf bs ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} --rescan=true --format=table --extended-table=true --vuln=true --fail=false
 

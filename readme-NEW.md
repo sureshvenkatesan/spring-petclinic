@@ -10,48 +10,37 @@ Develop a DevOps pipeline to automate tasks such as code compile, unit testing, 
 Note: This process with not deploy to the envionrmnet platform. 
 
 
-## Pipeline: GitHub Actions
-### Maven
-- [![JF-CLI with MVN](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn.yml)
-- [![JF-CLI with Maven and Xray](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-xray.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-xray.yml)
-- [![JF-CLI with Maven and Docker](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-docker.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-docker.yml)
-- [![JF-CLI with Maven, Docker, and Xray](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-docker-xray.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-docker-xray.yml)
-
-### Gradle
-- [![JF-CLI with Gradle](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-gradle.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-gradle.yml)
-- [![JF-CLI with Gradle and Xray](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-gradle-xray.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-gradle-xray.yml)
-
-### Query Properties
-- [![JF-CLI - Query Artifact properties](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-query-artifacts.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-query-artifacts.yml)
-
-
-## Pipeline: Shell scripts
-### Maven
-- JF-CLI with Maven [jf-cli-mvn.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-mvn.sh)
-- JF-CLI with Maven + Xray [jf-cli-mvn-xray.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-mvn-xray.sh)
-- JF-CLI with Maven + RBv2 [jf-cli-mvn-rbv2.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-mvn-rbv2.sh)
-- JF-CLI with Maven + Docker [jf-cli-mvn-docker.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-mvn-docker.sh)
-- JF-CLI with Maven + Docker + Xray [jf-cli-mvn-docker-xray.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-mvn-docker-xray.sh)
-
-### Gradle
-- JF-CLI with Gradle [jf-cli-gradle.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-gradle.sh)
-- JF-CLI with Gradle + Xray [jf-cli-gradle-xray.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-gradle-xray.sh)
-
-## Pipeline: Jenkins
-## JF-CLI
-- JF-CLI with MVN [Jenkinsfile.jfcli.mvn](https://github.com/DayOne-Dev/spring-petclinic/blob/main/Jenkinsfile.jfcli.mvn)
-- JF-CLI with MVN + Xray [Jenkinsfile.jfcli.mvn](https://github.com/DayOne-Dev/spring-petclinic/blob/main/Jenkinsfile.jfcli.mvn-xray)
-- JF-CLI with MVN + RBv2 [Jenkinsfile.jfcli.mvn-rbv2](https://github.com/DayOne-Dev/spring-petclinic/blob/main/Jenkinsfile.jfcli.mvn-rbv2)
-- JF-CLI with MVN + Docker [Jenkinsfile.jfcli.mvn-docker](https://github.com/DayOne-Dev/spring-petclinic/blob/main/Jenkinsfile.jfcli.mvn-docker)
-- JF-CLI with MVN + Docker + Xray [Jenkinsfile.jfcli.mvn-docker-xray](https://github.com/DayOne-Dev/spring-petclinic/blob/main/Jenkinsfile.jfcli.mvn-docker-xray)
-
-### MAVEN  
-- [pipeline file: Jenkins](./Jenkinsfile)
-- [![Walk through demo](https://img.youtube.com/vi/zgiaPIp-ZZA/0.jpg)](https://www.youtube.com/watch?v=zgiaPIp-ZZA)
-
-## Pipeline: GitLab
-- JF-CLI with MVN [./gitlab-ci.yml](https://gitlab.com/krishnamanchikalapudi/spring-petclinic/-/blob/main/.gitlab-ci.yml)
-- [GitLab jobs](https://gitlab.com/krishnamanchikalapudi/spring-petclinic/-/jobs)
+## Pipeline samples
+| CI/CD | Description | Code | [youtube.com/@DayOneDev](https://youtube.com/@DayOneDev) |
+| ------------- |:-------------:| -------------:| -------------:|
+| [GitHub Actions](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn.yml) | [JF-CLI](https://jfrog.com/getcli/) build with MVN | [![JF-CLI with MVN](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn.yml) | [![Walk through demo](https://img.youtube.com/vi/xce4lr8C_Hw/0.jpg)](https://www.youtube.com/watch?v=xce4lr8C_Hw) | 
+| [GitHub Actions](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-xray.yml) | [JF-CLI](https://jfrog.com/getcli/) build with MVN + Xray | [![JF-CLI with MVN + Xray](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-xray.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-xray.yml) | [![Walk through demo](https://img.youtube.com/vi//0.jpg)](https://www.youtube.com/watch?v=) | 
+| [GitHub Actions](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-docker.yml) | [JF-CLI](https://jfrog.com/getcli/) build with MVN + Docker | [![JF-CLI with MVN + Docker](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-docker.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-docker.yml) | [![Walk through demo](https://img.youtube.com/vi//0.jpg)](https://www.youtube.com/watch?v=) | 
+| [GitHub Actions](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-docker-xray.yml) | [JF-CLI](https://jfrog.com/getcli/) build with MVN + Docker + Xray | [![JF-CLI with MVN + Docker + Xray](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-docker-xray.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-docker-xray.yml) | [![Walk through demo](https://img.youtube.com/vi//0.jpg)](https://www.youtube.com/watch?v=) | 
+| [GitHub Actions](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-rbv2.yml) | [JF-CLI](https://jfrog.com/getcli/) build with MVN + RBv2 | [![JF-CLI with MVN + Docker + Xray](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-rbv2.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-mvn-rbv2.yml) | [![Walk through demo](https://img.youtube.com/vi//0.jpg)](https://www.youtube.com/watch?v=) | 
+| [GitHub Actions](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-gradle.yml) | [JF-CLI](https://jfrog.com/getcli/) build with Gradle | [![JF-CLI with Gradle](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-gradle.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-gradle.yml) | [![Walk through demo](https://img.youtube.com/vi//0.jpg)](https://www.youtube.com/watch?v=) | 
+| [GitHub Actions](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-gradle-xray.yml) | [JF-CLI](https://jfrog.com/getcli/) build with Gradle + Xray | [![JF-CLI with Gradle + Xray](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-gradle-xray.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-gradle-xray.yml) | [![Walk through demo](https://img.youtube.com/vi//0.jpg)](https://www.youtube.com/watch?v=) | 
+| [GitHub Actions](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-query-artifacts.yml) | [JF-CLI](https://jfrog.com/getcli/)to Query Artifact properties | [![JF-CLI to Query Artifact properties](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-query-artifacts.yml/badge.svg)](https://github.com/DayOne-Dev/spring-petclinic/actions/workflows/jfcli-query-artifacts.yml) | [![Walk through demo](https://img.youtube.com/vi//0.jpg)](https://www.youtube.com/watch?v=) | 
+| Jenkins | Build with MVN | [Jenkinsfile](https://github.com/DayOne-Dev/spring-petclinic/blob/main/Jenkinsfile) | [![Walk through demo](https://img.youtube.com/vi/kvQ4JFjq3r8/0.jpg)](https://www.youtube.com/watch?v=kvQ4JFjq3r8) | 
+| Jenkins | [JF-CLI](https://jfrog.com/getcli/) build with MVN | [Jenkinsfile.jfcli.mvn](https://github.com/DayOne-Dev/spring-petclinic/blob/main/Jenkinsfile.jfcli.mvn) | [![Walk through demo](https://img.youtube.com/vi/F-6B7mgIqqI/0.jpg)](https://www.youtube.com/watch?v=F-6B7mgIqqI) | 
+| Jenkins | [JF-CLI](https://jfrog.com/getcli/) build with MVN + Xray | [Jenkinsfile.jfcli.mvn-xray](https://github.com/DayOne-Dev/spring-petclinic/blob/main/Jenkinsfile.jfcli.mvn-xray) | [![Walk through demo](https://img.youtube.com/vi/76E1jQQOxIg/0.jpg)](https://www.youtube.com/watch?v=76E1jQQOxIg) |
+| Jenkins | [JF-CLI](https://jfrog.com/getcli/) build with MVN + Docker | [Jenkinsfile.jfcli.mvn-docker](https://github.com/DayOne-Dev/spring-petclinic/blob/main/Jenkinsfile.jfcli.mvn-docker) | [![Walk through demo](https://img.youtube.com/vi//0.jpg)](https://www.youtube.com/watch?v=) | 
+| Jenkins | [JF-CLI](https://jfrog.com/getcli/) build with MVN + Docker + Xray | [Jenkinsfile.jfcli.mvn-docker-xray](https://github.com/DayOne-Dev/spring-petclinic/blob/main/Jenkinsfile.jfcli.mvn-docker-xray) | [![Walk through demo](https://img.youtube.com/vi//0.jpg)](https://www.youtube.com/watch?v=) | 
+| Jenkins | [JF-CLI](https://jfrog.com/getcli/) build with MVN + RBv2 | [Jenkinsfile.jfcli.mvn-rbv2](https://github.com/DayOne-Dev/spring-petclinic/blob/main/Jenkinsfile.jfcli.mvn-rbv2) | [![Walk through demo](https://img.youtube.com/vi//0.jpg)](https://www.youtube.com/watch?v=) | 
+| [GitLab Pipelines](https://gitlab.com/krishnamanchikalapudi/spring-petclinic/-/pipelines) | [JF-CLI](https://jfrog.com/getcli/) build with MVN | [gitlab-ci.yml](https://gitlab.com/krishnamanchikalapudi/spring-petclinic/-/blob/main/.gitlab-ci.yml) | [![Walk through demo](https://img.youtube.com/vi/pDIW8rHZGEA/0.jpg)](https://www.youtube.com/watch?v=pDIW8rHZGEA) | 
+| Shell Script | [JF-CLI](https://jfrog.com/getcli/) build with MVN | [jf-cli-mvn.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-mvn.sh) | [![Walk through demo](https://img.youtube.com/vi/NhOPPVn3b6M/0.jpg)](https://www.youtube.com/watch?v=NhOPPVn3b6M) | 
+| Shell Script | [JF-CLI](https://jfrog.com/getcli/) build with MVN + Xray | [jf-cli-mvn-xray.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-mvn-xray.sh) | [![Walk through demo](https://img.youtube.com/vi/G0nzuTly6oU/0.jpg)](https://www.youtube.com/watch?v=G0nzuTly6oU) | 
+| Shell Script | [JF-CLI](https://jfrog.com/getcli/) build with MVN + Docker| [jf-cli-mvn-docker.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-mvn-docker.sh) | [![Walk through demo](https://img.youtube.com/vi//0.jpg)](https://www.youtube.com/watch?v=) |
+| Shell Script | [JF-CLI](https://jfrog.com/getcli/) build with MVN + Docker + Xray| [jf-cli-mvn-docker-xray.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-mvn-docker-xray.sh) | [![Walk through demo](https://img.youtube.com/vi//0.jpg)](https://www.youtube.com/watch?v=) | 
+| Shell Script | [JF-CLI](https://jfrog.com/getcli/) build with MVN + RBv2| [jf-cli-mvn-rbv2.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-mvn-rbv2.sh) | [![Walk through demo](https://img.youtube.com/vi//0.jpg)](https://www.youtube.com/watch?v=) | 
+| Shell Script | [JF-CLI](https://jfrog.com/getcli/) build with Gradle | [jf-cli-gradle.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-gradle.sh) | [![Walk through demo](https://img.youtube.com/vi//0.jpg)](https://www.youtube.com/watch?v=) | 
+| Shell Script | [JF-CLI](https://jfrog.com/getcli/) build with Gradle + Xray | [jf-cli-gradle-xray.sh](https://github.com/DayOne-Dev/spring-petclinic/blob/main/jf-cli-gradle-xray.sh) | [![Walk through demo](https://img.youtube.com/vi//0.jpg)](https://www.youtube.com/watch?v=) | 
+<!-- 
+| CI/CD | Description | Code | [youtube.com/@DayOneDev](https://youtube.com/@DayOneDev) |
+|    |    |    |    | 
+|    |    |    |    | 
+|    |    |    |    | 
+-->
 
 ## Pipeline: Flow Diagrams
 ### JF-CLI Docker pipeline

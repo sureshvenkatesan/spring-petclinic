@@ -25,6 +25,7 @@ jobs:
       JF_RT_URL: https://${{ vars.JF_NAME }}.jfrog.io
       JFROG_CLI_LOG_LEVEL: ${{vars.JFROG_CLI_LOG_LEVEL}} # DEBUG, INFO, WARN, ERROR
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 20   # ref  https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idtimeout-minutes
     steps:
       # Use the specific setup-cli branch. Ref https://github.com/marketplace/actions/setup-jfrog-cli
       - name: Setup JFrog CLI

@@ -10,8 +10,11 @@ build/
 !**/src/test/**/build/
 
 jf-cli-test.sh
-
 .jfrog/
+.bkp
+*.bkp
+**/*.bkp
+**/**/*.bkp
 
 ### STS ###
 .attach_pid*
