@@ -151,3 +151,10 @@ jobs:
           ts="cmd.$(date '+%Y-%m-%d-%H-%M')" 
           jf rt sp "job=github-action;env=demo;org=ps;team=arch;pack_cat=webapp;build=maven;product=artifactory;features=package,buildinfo;ts=ts-${BUILD_ID}" --build="${{ env.BUILD_NAME}}/${{ env.BUILD_ID}}"
 
+      - name: Query build info
+        env: 
+          BUILD_INFO_JSON: "BuildInfo-${{ env.BUILD_ID}}.json"
+        run: |
+           jf rt curl "/api/build/${{ env.BUILD_NAME}}/${{ env.BUILD_ID}}" -o $BUILD_INFO_JSON
+           cat $BUILD_INFO_JSON
+           
