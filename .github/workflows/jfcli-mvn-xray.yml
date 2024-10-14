@@ -61,6 +61,7 @@ jobs:
           JFROG_CLI_EXTRACTORS_REMOTE: '${{ env.JF_RT_URL }}/artifactory/${{ env.RT_REPO_MVN_VIRTUAL}}'
           JF_GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          version: 2.71.0
           oidc-provider-name: ${{ vars.JF_OIDC_PROVIDER_NAME }}
           disable-job-summary: ${{env.JOB_SUMMARY}}
 
