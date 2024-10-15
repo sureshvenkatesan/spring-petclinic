@@ -141,4 +141,4 @@ jobs:
           FILE_NAME: "QueryByMvnBuildNameAndBuildId.json"
           RT_REPO_VIRTUAL: 'krishnam-mvn-virtual'
         run: |
-          jf xr curl
+          jf xr curl 'api/v1/binMgr/{id}/builds'

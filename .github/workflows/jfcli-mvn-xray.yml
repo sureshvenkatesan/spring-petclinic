@@ -168,6 +168,8 @@ jobs:
            jf rt curl "/api/build/${{ env.BUILD_NAME}}/${{ env.BUILD_ID}}" -o $BUILD_INFO_JSON
            cat $BUILD_INFO_JSON
 
+           sleep 20   # sleep for 20 seconds
+
       - name: Build Scan status
         run: |
           jf xr curl "/api/v1/build/status" -H 'Content-Type: application/json' -d '{"name": "${{ env.BUILD_NAME}}", "number": "${{ env.BUILD_ID}}" }'

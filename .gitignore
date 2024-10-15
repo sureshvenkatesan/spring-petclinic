@@ -4,12 +4,15 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .gradle
+.gradle/*
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+jfcli-mvn-rbv2-promote.yml
 jfcli-parallel.yml
+
 jf-cli-test.sh
 .jfrog/
 .bkp

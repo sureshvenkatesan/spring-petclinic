@@ -165,10 +165,7 @@ jobs:
       - name: RBv2 promote DEV
         run: |
           jf rbp ${{ env.BUILD_NAME}} ${{ env.BUILD_ID }} DEV --sync="true" --signing-key=${{env.RBv2_SIGNING_KEY}}  
-      - name: RBv2 promote QA
-        run: |
-          jf rbp ${{ env.BUILD_NAME}} ${{ env.BUILD_ID }} QA --sync="true" --signing-key=${{env.RBv2_SIGNING_KEY}}  
-
+     
       - name: rbv2-summary
         run: |
           echo "# :frog: Release Bundle v2 Summary :rocket: " >> $GITHUB_STEP_SUMMARY
