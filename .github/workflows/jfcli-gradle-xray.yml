@@ -165,6 +165,8 @@ jobs:
            jf rt curl "/api/build/${{ env.BUILD_NAME}}/${{ env.BUILD_ID}}" -o $BUILD_INFO_JSON
            cat $BUILD_INFO_JSON
 
+           sleep 20   # Sleeping for 20 seconds before executing the build publish seems to have resolved the build-scan issue. This delay might be helping with synchronization or resource availability, ensuring a smooth build process.
+
       - name: Xray build scan
         timeout-minutes: 15    # ref https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idstepstimeout-minutes
         run: |
