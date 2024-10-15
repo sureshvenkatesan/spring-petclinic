@@ -96,7 +96,7 @@ jobs:
           # jf config
           jf config show
 
-      - name: Config jf with mvn repos
+      - name: Config jf with gradle repos
         run: |
           export JFROG_CLI_LOG_LEVEL=${{ env.JFROG_CLI_LOG_LEVEL }}
           export JFROG_CLI_LOG_TIMESTAMP=DATE_AND_TIME

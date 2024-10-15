@@ -1,0 +1,15 @@
+/Users/krishnam/Documents/GitHub-DayOne/spring-petclinic/src/test/java/org/springframework/samples/petclinic/MySqlIntegrationTests.java
+/Users/krishnam/Documents/GitHub-DayOne/spring-petclinic/src/test/java/org/springframework/samples/petclinic/MysqlTestApplication.java
+/Users/krishnam/Documents/GitHub-DayOne/spring-petclinic/src/test/java/org/springframework/samples/petclinic/PetClinicIntegrationTests.java
+/Users/krishnam/Documents/GitHub-DayOne/spring-petclinic/src/test/java/org/springframework/samples/petclinic/PostgresIntegrationTests.java
+/Users/krishnam/Documents/GitHub-DayOne/spring-petclinic/src/test/java/org/springframework/samples/petclinic/model/ValidatorTests.java
+/Users/krishnam/Documents/GitHub-DayOne/spring-petclinic/src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java
+/Users/krishnam/Documents/GitHub-DayOne/spring-petclinic/src/test/java/org/springframework/samples/petclinic/owner/PetControllerTests.java
+/Users/krishnam/Documents/GitHub-DayOne/spring-petclinic/src/test/java/org/springframework/samples/petclinic/owner/PetTypeFormatterTests.java
+/Users/krishnam/Documents/GitHub-DayOne/spring-petclinic/src/test/java/org/springframework/samples/petclinic/owner/VisitControllerTests.java
+/Users/krishnam/Documents/GitHub-DayOne/spring-petclinic/src/test/java/org/springframework/samples/petclinic/service/ClinicServiceTests.java
+/Users/krishnam/Documents/GitHub-DayOne/spring-petclinic/src/test/java/org/springframework/samples/petclinic/service/EntityUtils.java
+/Users/krishnam/Documents/GitHub-DayOne/spring-petclinic/src/test/java/org/springframework/samples/petclinic/system/CrashControllerIntegrationTests.java
+/Users/krishnam/Documents/GitHub-DayOne/spring-petclinic/src/test/java/org/springframework/samples/petclinic/system/CrashControllerTests.java
+/Users/krishnam/Documents/GitHub-DayOne/spring-petclinic/src/test/java/org/springframework/samples/petclinic/vet/VetControllerTests.java
+/Users/krishnam/Documents/GitHub-DayOne/spring-petclinic/src/test/java/org/springframework/samples/petclinic/vet/VetTests.java
