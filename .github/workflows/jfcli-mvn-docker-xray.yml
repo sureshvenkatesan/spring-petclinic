@@ -151,6 +151,10 @@ jobs:
         run: |
           docker image build -f Dockerfile-mvn -t ${{ vars.JF_NAME }}.jfrog.io/${{env.RT_DOCKER_REPO_VIRTUAL}}/${{ env.BUILD_NAME }}:${{ env.BUILD_ID}} --platform "${{env.DOCKER_BUILDX_PLATFORMS}}" --metadata-file "${{env.DOCKER_METADATA_JSON}}" --push .
 
+      - name: Docker pull image
+        run: |
+          docker pull ${{ vars.JF_NAME }}.jfrog.io/${{env.RT_DOCKER_REPO_VIRTUAL}}/${{ env.BUILD_NAME }}:${{ env.BUILD_ID}}
+
       - name: Docker image list
         run: |
           docker image ls

@@ -60,6 +60,8 @@ jf rt bag ${BUILD_NAME} ${BUILD_ID}
 echo "\n\n**** Build Info: Publish ****\n\n"
 jf rt bp ${BUILD_NAME} ${BUILD_ID} --detailed-summary=true
 
+sleep 20
+
 ## XRAY build scan   ref# https://docs.jfrog-applications.jfrog.io/jfrog-applications/jfrog-cli/cli-for-jfrog-security/scan-published-builds
 echo "\n\n**** [XRAY] build scan ****"
 jf bs ${BUILD_NAME} ${BUILD_ID} --rescan=true --format=table --extended-table=true --vuln=true --fail=false
