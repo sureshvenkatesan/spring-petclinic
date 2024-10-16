@@ -169,9 +169,14 @@ jobs:
           export e_env="e_demo" e_org="e_ps" e_team="e_arch" e_build="maven" e_job="github-action" e_product="artifactory,xray" e_features="package,docker,buildinfo"
 
  # Build Info
+    # Executive Order: 
+    #       https://www.whitehouse.gov/briefing-room/presidential-actions/2021/05/12/executive-order-on-improving-the-nations-cybersecurity/
+    #       https://www.nist.gov/itl/executive-order-14028-improving-nations-cybersecurity
     # US Dept of Commerce: https://www.ntia.gov/page/software-bill-materials
     # US Cyber Defence Agency: https://www.cisa.gov/sbom
-    #  NIST: https://www.nist.gov/itl/executive-order-14028-improving-nations-cybersecurity/software-security-supply-chains-software-1
+    # NIST: https://www.nist.gov/itl/executive-order-14028-improving-nations-cybersecurity/software-security-supply-chains-software-1
+    # NITA: https://www.ntia.gov/page/software-bill-materials 
+    # Centers for Medicare & Medicaid Services: https://security.cms.gov/learn/software-bill-materials-sbom
       - name: Collect env
         run: jf rt bce ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} 
  
