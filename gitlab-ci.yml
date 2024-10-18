@@ -1,27 +1,23 @@
 stages:
-  - scan
   - build
-  - promote-to-release
 
 include: # files at https://releases.jfrog.io/artifactory/jfrog-cli/gitlab/v2/ 
   - remote: "https://releases.jfrog.io/artifactory/jfrog-cli/gitlab/v2/.setup-jfrog-unix.yml" 
   # For Windows agents:
   #- remote: "https://releases.jfrog.io/artifactory/jfrog-cli/gitlab/v2/.setup-jfrog-windows.yml"
 
-jfrog-maven-build:
+default:
   image: maven:3-eclipse-temurin-17  # ref https://hub.docker.com/_/maven/
+
+jf-mvn:
   stage: build
   variables:
+    BUILD_ID: "gl-mvn-${CI_PIPELINE_ID}"   # CI_PIPELINE_ID    CI_JOB_ID
     RT_REPO_MVN_VIRTUAL: "krishnam-mvn-virtual"
     BUILD_NAME: "spring-petclinic"
-    BUILD_ID: "gl-mvn-${CI_PIPELINE_ID}"   # CI_PIPELINE_ID    CI_JOB_ID
     JFROG_CLI_BUILD_URL: $CI_JOB_URL
-    JFROG_CLI_TEMP_DIR: $CI_PROJECT_DIR/build-info
   script:
     - !reference [.setup_jfrog, script]
-
-    # Audit Maven project
-    - jf audit --mvn --extended-table=true
 
     # Configure JFrog Artifactory repositories
     - jf mvnc --repo-deploy-releases ${RT_REPO_MVN_VIRTUAL} --repo-deploy-snapshots ${RT_REPO_MVN_VIRTUAL}
@@ -38,10 +34,46 @@ jfrog-maven-build:
     # Publish build-info to JFrog Artifactory
     - jf rt bp ${BUILD_NAME} ${BUILD_ID} --dry-run
 
+  # after_script:     # Cleanup
+  #   - !reference [.cleanup_jfrog, script]
+
+
+jf-mvn-xray:
+  stage: build
+  variables:
+    BUILD_ID: "gl-mvn-xray-${CI_PIPELINE_ID}"   # CI_PIPELINE_ID    CI_JOB_ID
+    RT_REPO_MVN_VIRTUAL: "krishnam-mvn-virtual"
+    BUILD_NAME: "spring-petclinic"
+    JFROG_CLI_BUILD_URL: $CI_JOB_URL
+  script:
+    - !reference [.setup_jfrog, script]
+
+    # Audit Maven project
+    - jf audit --mvn --extended-table=true
+
+    # Configure JFrog Artifactory repositories
+    - jf mvnc --repo-deploy-releases ${RT_REPO_MVN_VIRTUAL} --repo-deploy-snapshots ${RT_REPO_MVN_VIRTUAL}
+
+    # Build Maven project and publish artifacts to JFrog Artifactory
+    - jf mvn clean install -DskipTests=true --build-name=${BUILD_NAME} --build-number=${BUILD_ID} --detailed-summary=true 
+
+    # Xray scan
+    - jf scan . --extended-table=true
+
+    # Add enviroment variables to build-info
+    - jf rt bce ${BUILD_NAME} ${BUILD_ID}
+
+    # Add information from git to build-info
+    - jf rt bag ${BUILD_NAME} ${BUILD_ID}
+
+    # Publish build-info to JFrog Artifactory
+    - jf rt bp ${BUILD_NAME} ${BUILD_ID} --dry-run
+
+    # sleep for 20 secs
+    - sleep 20
+
+    # JF Build scan
+    - jf bs ${BUILD_NAME} ${BUILD_ID} --rescan=true --format=table --extended-table=true --fail=false
+    
   after_script:     # Cleanup
     - !reference [.cleanup_jfrog, script]
-
-  artifacts:
-    paths:
-      - build
-      - build-info 
