@@ -101,7 +101,7 @@ node {
             stage('scan') {
                 sh """ #!/bin/bash
                     jf docker pull ${JF_RT_HOST}/${RT_REPO_DOCKER_VIRTUAL}/${JKS_BUILD_NAME}:${JKS_BUILD_ID} --build-name=${JKS_BUILD_NAME} --build-number=${JKS_BUILD_ID}
-                    jf docker scan ${JF_RT_HOST}/${RT_REPO_DOCKER_VIRTUAL}/${JKS_BUILD_NAME}:${JKS_BUILD_ID} --build-name=${JKS_BUILD_NAME} --build-number=${JKS_BUILD_ID}
+                    jf docker scan ${JF_RT_HOST}/${RT_REPO_DOCKER_VIRTUAL}/${JKS_BUILD_NAME}:${JKS_BUILD_ID} --build-name=${JKS_BUILD_NAME} --build-number=${JKS_BUILD_ID} --format=table --extended-table=true --vuln=true --licenses=true --fail=false --detailed-summary=true
                 """
             } // stage: scan
         } // stage: docker

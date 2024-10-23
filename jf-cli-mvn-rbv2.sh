@@ -17,7 +17,7 @@ jf rt ping --url=${JF_RT_URL}/artifactory
 # MVN 
 ## Config - project
 ### CLI
-export BUILD_NAME="spring-petclinic" BUILD_ID="cmd.mvn.$(date '+%Y-%m-%d-%H-%M')" 
+export BUILD_NAME="spring-petclinic" BUILD_ID="cmd.mvn.rbv2.$(date '+%Y-%m-%d-%H-%M')" 
 
 ### Jenkins
 # export BUILD_NAME=${env.JOB_NAME} BUILD_ID=${env.BUILD_ID} 
@@ -25,7 +25,7 @@ export BUILD_NAME="spring-petclinic" BUILD_ID="cmd.mvn.$(date '+%Y-%m-%d-%H-%M')
 # https://www.jenkins.io/doc/book/pipeline/jenkinsfile/#using-environment-variables 
 # https://wiki.jenkins.io/JENKINS/Building+a+software+project 
 
-echo " BUILD_NAME: $BUILD_NAME \n BUILD_ID: $BUILD_ID \n JFROG_CLI_LOG_LEVEL: $JFROG_CLI_LOG_LEVEL  \n RT_PROJECT_REPO: $RT_PROJECT_REPO  \n "
+echo " BUILD_NAME: $BUILD_NAME \n BUILD_ID: $BUILD_ID \n JFROG_CLI_LOG_LEVEL: $JFROG_CLI_LOG_LEVEL  \n RT_REPO_VIRTUAL: $RT_REPO_VIRTUAL  \n "
 
 jf mvnc --global --repo-resolve-releases ${RT_REPO_VIRTUAL} --repo-resolve-snapshots ${RT_REPO_VIRTUAL} 
 
@@ -47,36 +47,66 @@ jf rt bag ${BUILD_NAME} ${BUILD_ID}
 echo "\n\n**** Build Info: Publish ****\n\n"
 jf rt bp ${BUILD_NAME} ${BUILD_ID} --detailed-summary=true
 
-# set-props
-echo "\n\n**** Props: set ****\n\n"  # These properties were captured Artifacts >> repo path 'spring-petclinic.---.jar' >> Properties
-jf rt sp "env=demo;job=cmd;org=ps;team=arch;pack_cat=webapp;build=maven;ts=ts-${BUILD_ID}" --build="${BUILD_NAME}/${BUILD_ID}"
-
+sleep 20
 
 ## RBv2: release bundle - create   ref: https://docs.jfrog-applications.jfrog.io/jfrog-applications/jfrog-cli/cli-for-jfrog-artifactory/release-lifecycle-management
 echo "\n\n**** RBv2: Create ****\n\n"
-echo " BUILD_NAME: $BUILD_NAME \n BUILD_ID: $BUILD_ID \n RT_PROJECT_REPO: $RT_PROJECT_REPO  \n RT_PROJECT_RB_SIGNING_KEY: $RT_PROJECT_RB_SIGNING_KEY  \n "
+echo " BUILD_NAME: $BUILD_NAME \n BUILD_ID: $BUILD_ID \n RT_REPO_VIRTUAL: $RT_REPO_VIRTUAL  \n RBv2_SIGNING_KEY: $RBv2_SIGNING_KEY  \n "
 
   # create spec
-echo "{ \"files\": [ {\"build\": \"${BUILD_NAME}/${BUILD_ID}\", \"includeDeps\": \"false\" } ] }"  > RBv2-SPEC-${BUILD_ID}.json
+export VAR_RBv2_SPEC="RBv2-SPEC-${BUILD_ID}.json"
+echo "{ \"files\": [ {\"build\": \"${BUILD_NAME}/${BUILD_ID}\", \"includeDeps\": \"false\" } ] }"  > $VAR_RBv2_SPEC
 #echo "{ \"files\": [ {\"build\": \"${BUILD_NAME}/${BUILD_ID}\", \"props\": \"build_name=${BUILD_NAME};build_id=${BUILD_ID};PACKAGE_CATEGORY=${PACKAGE_CATEGORY};state=new\" } ] }"  > RBv2-SPEC-${BUILD_ID}.json
-echo "\n" && cat RBv2-SPEC-${BUILD_ID}.json && echo "\n"
+echo "\n" && cat $VAR_RBv2_SPEC && echo "\n"
 
   # create RB to state=NEW
-jf rbc ${BUILD_NAME} ${BUILD_ID} --sync="true" --access-token="${JF_ACCESS_TOKEN}" --url="${JF_RT_URL}" --signing-key="${RT_PROJECT_RB_SIGNING_KEY}" --spec="RBv2-SPEC-${BUILD_ID}.json" --server-id="psazuse" # --spec-vars="build_name=${BUILD_NAME};build_id=${BUILD_ID};PACKAGE_CATEGORY=${PACKAGE_CATEGORY};state=new" 
+jf rbc ${BUILD_NAME} ${BUILD_ID} --sync="true" --access-token="${JF_ACCESS_TOKEN}" --url="${JF_RT_URL}" --signing-key="${RBv2_SIGNING_KEY}" --spec="${VAR_RBv2_SPEC}" --server-id="psazuse" # --spec-vars="build_name=${BUILD_NAME};build_id=${BUILD_ID};PACKAGE_CATEGORY=${PACKAGE_CATEGORY};state=new" 
 
 ## RBv2: release bundle - DEV promote
 echo "\n\n**** RBv2: Promoted to DEV ****\n\n"
-jf rbp --sync="true" --access-token="${JF_ACCESS_TOKEN}" --url="${JF_RT_URL}" --signing-key="${RT_PROJECT_RB_SIGNING_KEY}" --server-id="psazuse" ${BUILD_NAME} ${BUILD_ID} DEV 
+jf rbp --sync="true" --access-token="${JF_ACCESS_TOKEN}" --url="${JF_RT_URL}" --signing-key="${RBv2_SIGNING_KEY}" --server-id="psazuse" ${BUILD_NAME} ${BUILD_ID} DEV 
 
-echo "\n\n**** RBv2: Promoted to NEW --> DEV --> PROD ****\n\n"
-jf rbp --sync="true" --access-token="${JF_ACCESS_TOKEN}" --url="${JF_RT_URL}" --signing-key="${RT_PROJECT_RB_SIGNING_KEY}" --server-id="psazuse" ${BUILD_NAME} ${BUILD_ID} PROD  
+echo "\n\n**** RBv2: Promoted to NEW --> DEV ****\n\n"
+jf rbp --sync="true" --access-token="${JF_ACCESS_TOKEN}" --url="${JF_RT_URL}" --signing-key="${RBv2_SIGNING_KEY}" --server-id="psazuse" ${BUILD_NAME} ${BUILD_ID} DEV  
+
+sleep 20
+
+### QUERY SCAN INFO
+# Build Scan status - ref: https://jfrog.com/help/r/xray-rest-apis/build-scan-status
+export VAR_BUILD_SCAN_INFO="BUILD-Scan-${BUILD_ID}.json"
+echo "\n\n**** Build: scan details ****\n\n"
+jf xr curl "/api/v1/build/status" -H "Content-Type: application/json" -d "{\"name\":\"${BUILD_NAME}\", \"number\":\"${BUILD_ID}\"}" --output $VAR_BUILD_SCAN_INFO
+cat $VAR_BUILD_SCAN_INFO
 
 sleep 5
+echo "\n\n**** RBv2: Promotion Summary ****\n\n"
+export VAR_RBv2_PROMO_INFO="RBv2-Xray-Scan-${BUILD_ID}.json"
+curl -XGET "${JF_RT_URL}/lifecycle/api/v2/promotion/records/${BUILD_NAME}/${BUILD_ID}?async=false" -H "Content-Type: application/json" -H "Authorization: Bearer ${JF_ACCESS_TOKEN}" --output $VAR_RBv2_PROMO_INFO
+cat $VAR_RBv2_PROMO_INFO
+
+items=$(cat $VAR_RBv2_PROMO_INFO | jq -c -r '.promotions[]')
+echo "\n**** RBv2: Promotion Info ****\n"
+for item in ${items[@]}; do
+# {"status":"COMPLETED","repository_key":"release-bundles-v2","release_bundle_name":"spring-petclinic-ga","release_bundle_version":"58","environment":"QA","service_id":"s","created_by":"token:***","created":"2024-09-21T00:53:57.326Z","created_millis":1726880037326,"xray_retrieval_status":"RECEIVED"}
+  envVal=$(echo $item | jq -r '.environment')
+  crtVal=$(echo $item | jq -r '.created')
+  echo "   ${envVal} on ${crtVal} " 
+done
+sleep 3
+
+## RBv2: scan details - ref: https://jfrog.com/help/r/xray-rest-apis/release-bundle-scan-status
+export VAR_RBv2_SCAN_INFO ="RBv2-Scan-${BUILD_ID}.json"
+echo "\n\n**** RBv2: DEV xray scan details ****\n\n"
+# jf xr curl "/api/v1/details/release_bundle_v2/${BUILD_NAME}/${BUILD_ID}?operation=promotion" --output $VAR_RBv2_SCAN_INFO
+# cat $VAR_RBv2_SCAN_INFO
 
 
-
+sleep 3
 echo "\n\n**** CLEAN UP ****\n\n"
-rm -rf RBv2-SPEC-${BUILD_ID}.json
+rm -rf $VAR_RBv2_SPEC
+rm -rf $VAR_BUILD_SCAN_INFO
+rm -rf $VAR_RBv2_PROMO_INFO
+rm -rf $VAR_RBv2_SCAN_INFO
 
 
 echo "\n\n**** DONE ****\n\n"

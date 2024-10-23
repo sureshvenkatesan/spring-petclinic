@@ -58,3 +58,4 @@ out/
 _site/
 *.css
 !petclinic.css
+RBv2-*.json

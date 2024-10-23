@@ -16,34 +16,20 @@ echo "JF_RT_URL: $JF_RT_URL \n JFROG_RT_USER: $JFROG_RT_USER \n JFROG_CLI_LOG_LE
 ## Health check
 jf rt ping --url=${JF_RT_URL}/artifactory
 
-# MVN 
-## Config - project
-### CLI
-export BUILD_NAME="spring-petclinic" BUILD_ID="cmd.mvn.xray.$(date '+%Y-%m-%d-%H-%M')" 
+export BUILD_NAME="spring-petclinic" BUILD_ID="cmd.mvn.rbv2.2024-10-21-18-01"
 
-### Jenkins
-# export BUILD_NAME=${env.JOB_NAME} BUILD_ID=${env.BUILD_ID} 
-# References: 
-# https://www.jenkins.io/doc/book/pipeline/jenkinsfile/#using-environment-variables 
-# https://wiki.jenkins.io/JENKINS/Building+a+software+project 
 
-echo " BUILD_NAME: $BUILD_NAME \n BUILD_ID: $BUILD_ID \n JFROG_CLI_LOG_LEVEL: $JFROG_CLI_LOG_LEVEL  \n RT_PROJECT_REPO: $RT_PROJECT_REPO  \n "
-jf mvnc --global --repo-resolve-releases ${RT_REPO_VIRTUAL} --repo-resolve-snapshots ${RT_REPO_VIRTUAL} 
+### QUERY SCAN INFO
+export VAR_RBv2_SCAN_INFO="RBv2-Scan-${BUILD_ID}.json"
+jf xr curl "/api/v1/details/release_bundle_v2/${BUILD_NAME}/${BUILD_ID}?operation=promotion"
 
-## Create Build
-echo "\n\n**** MVN: Package ****\n\n" # --scan=true
-jf mvn clean install -DskipTests=true --build-name=${BUILD_NAME} --build-number=${BUILD_ID} --detailed-summary=true 
 
-echo "\n\n**** CDX file:"
-ls -lrt ./target/classes/META-INF/sbom/
-
-## XRAY sbom enrich    ref# https://docs.jfrog-applications.jfrog.io/jfrog-applications/jfrog-cli/cli-for-jfrog-security/enrich-your-sbom
-# # find . -iname "*.cdx.json"      
-echo "\n\n**** [XRAY] sbom enrich ****"
-jf se "./target/classes/META-INF/sbom/application.cdx.json" > target/classes/META-INF/sbom/application.cdx-enrich.json
-
-echo "\n\n**** CDX files:"
-ls -lrt ./target/classes/META-INF/sbom/
+sleep 3
+echo "\n\n**** CLEAN UP ****\n\n"
+rm -rf $VAR_RBv2_SPEC
+rm -rf $VAR_BUILD_SCAN_INFO
+rm -rf $VAR_RBv2_PROMO_INFO
+rm -rf $VAR_RBv2_Xray_Scan
 
 
 echo "\n\n**** DONE ****\n\n"
