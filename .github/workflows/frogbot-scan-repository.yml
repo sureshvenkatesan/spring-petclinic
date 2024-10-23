@@ -31,6 +31,7 @@ jobs:
       - uses: jfrog/frogbot@v2
         env:
           JF_URL: https://${{ vars.JF_NAME }}.jfrog.io
+          JFROG_CLI_LOG_LEVEL: DEBUG
           # [Mandatory]
           # The GitHub token is automatically generated for the job
           JF_GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -153,3 +154,8 @@ jobs:
         # Insert to oidc-provider-name the 'Provider Name' defined in the OIDC integration configured in the JPD
         with:
            oidc-provider-name: ${{ vars.JF_OIDC_PROVIDER_NAME }}
+
+      - name: Upload output to generate autofix
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+            sarif_file: jfrog_sast.sarif
