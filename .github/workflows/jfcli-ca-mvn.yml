@@ -125,7 +125,7 @@ jobs:
 
       - name: Curation
         run: |
-          jf ca --format=table >> $GITHUB_STEP_SUMMARY
+          jf ca --format=table # >> $GITHUB_STEP_SUMMARY
 
 # Package
       - name: Create Build
