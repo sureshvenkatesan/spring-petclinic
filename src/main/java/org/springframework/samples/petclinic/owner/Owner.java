@@ -62,7 +62,7 @@ public class Owner extends Person {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "owner_id")
 	@OrderBy("name")
-	private final List<Pet> pets = new ArrayList<>();
+	private List<Pet> pets = new ArrayList<>();
 
 	public String getAddress() {
 		return this.address;

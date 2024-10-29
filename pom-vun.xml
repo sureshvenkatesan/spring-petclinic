@@ -39,6 +39,13 @@
   </properties>
 
   <dependencies>
+    <!-- jfrog_dummy is malicious test jar -->  
+    <dependency>
+     <groupId>io.github.andr3colonel</groupId>
+     <artifactId>jfrog_dummy</artifactId>
+     <version>1.0.0</version>
+   </dependency>
+
     <!-- Spring and Spring Boot dependencies -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
