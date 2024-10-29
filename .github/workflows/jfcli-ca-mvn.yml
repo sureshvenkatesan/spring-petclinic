@@ -164,4 +164,10 @@ jobs:
         run: |
            jf rt curl "/api/build/${{ env.BUILD_NAME}}/${{ env.BUILD_ID}}" -o $BUILD_INFO_JSON
            cat $BUILD_INFO_JSON
-           
+
+# Build Promote
+      - name: Build promote
+        env: 
+          QA_REPO: "krishnam-mvn-qa-local"
+        run: |
+           jf rt build-promote ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} $QA_REPO --status='QA candidate' --props="team=architecture;maintainer=ps;stage=DEV2QA" --comment='petclinic is now QA candidate and hand over for regression test'

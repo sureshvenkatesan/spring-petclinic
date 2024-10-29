@@ -49,7 +49,7 @@ jf rt curl "/api/build/${BUILD_NAME}/${BUILD_ID}"
 
 ## bpr: build-promote - https://docs.jfrog-applications.jfrog.io/jfrog-applications/jfrog-cli/cli-for-jfrog-artifactory/build-integration#promoting-a-build
 echo "\n\n**** Build Promote: ****\n\n"
-# jf rt bpr spring-petclinic 'cmd.mvn.2024-10-28-20-59' krishnam-mvn-qa-local --props='promote=DEV2QA'
+# jf rt build-promote spring-petclinic 'cmd.mvn.20241028-2133' 'krishnam-mvn-qa-local' --status='QA candidate' --props="team=architecture;maintainer=ps;stage=DEV2QA" --comment='petclinic is now QA candidate and hand over for regression test'
 jf rt build-promote ${BUILD_NAME} ${BUILD_ID} 'krishnam-mvn-qa-local' --status='QA candidate' --props="team=architecture;maintainer=ps;stage=DEV2QA" --comment='petclinic is now QA candidate and hand over for regression test'
 
 
