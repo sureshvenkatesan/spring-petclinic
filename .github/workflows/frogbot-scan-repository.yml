@@ -29,21 +29,28 @@ jobs:
       - name: Software version
         run: |
           # Java
-          java -version
-          # MVN
-          mvn -version
-          # Docker
-          docker -v
+          echo "JAVA_VER=${java -version}" >> $GITHUB_ENV
           # Python
-          python3 -V
-          pip3 -V
+          echo "PY_VER=${python3 -V}" >> $GITHUB_ENV
+          echo "PIP_VER=${pip3 -V}" >> $GITHUB_ENV
           # NodeJS
-          node -v
-          npm -v 
-          # JFrog CLI version
-          # jf --version
-          # jf config
-          # jf config show
+          echo "NODE_VER=${node -v}" >> $GITHUB_ENV
+          echo "NPM_VER=${npm -v}" >> $GITHUB_ENV
+
+      - name: prestep-summary
+        run: |
+          jfcliv=`jf --version`
+          echo "# :frog: Prestep Summary :pushpin:" >> $GITHUB_STEP_SUMMARY
+          echo " " >> $GITHUB_STEP_SUMMARY
+          echo " " >> $GITHUB_STEP_SUMMARY
+          echo " - ${{ env.JAVA_VER }} " >> $GITHUB_STEP_SUMMARY
+          echo " " >> $GITHUB_STEP_SUMMARY
+          echo " - ${{ env.PY_VER }} " >> $GITHUB_STEP_SUMMARY
+          echo " - ${{ env.PIP_VER }} " >> $GITHUB_STEP_SUMMARY
+          echo " " >> $GITHUB_STEP_SUMMARY
+          echo " - ${{ env.NODE_VER }} " >> $GITHUB_STEP_SUMMARY
+          echo " - ${{ env.NPM_VER }} " >> $GITHUB_STEP_SUMMARY
+          echo " " >> $GITHUB_STEP_SUMMARY
 
       - uses: actions/checkout@v4
 
