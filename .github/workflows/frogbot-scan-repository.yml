@@ -37,6 +37,9 @@ jobs:
           # Python
           python3 -V
           pip3 -V
+          # NodeJS
+          node -v
+          npm -v 
           # JFrog CLI version
           # jf --version
           # jf config
