@@ -44,7 +44,6 @@ jobs:
 
       - name: prestep-summary
         run: |
-          jfcliv=`jf --version`
           echo "# :frog: Prestep Summary :pushpin:" >> $GITHUB_STEP_SUMMARY
           echo " " >> $GITHUB_STEP_SUMMARY
           echo " " >> $GITHUB_STEP_SUMMARY
