@@ -28,8 +28,6 @@ jobs:
     steps:
       - name: Software version
         run: |
-          # JFrog CLI version
-          jf --version
           # Java
           java -version
           # MVN
@@ -39,8 +37,10 @@ jobs:
           # Python
           python3 -V
           pip3 -V
+          # JFrog CLI version
+          # jf --version
           # jf config
-          jf config show
+          # jf config show
 
       - uses: actions/checkout@v4
 
