@@ -29,13 +29,18 @@ jobs:
       - name: Software version
         run: |
           # Java
-          echo "JAVA_VER=${java -version}" >> $GITHUB_ENV
+          java_v=`java -version`
+          echo "JAVA_VER=${java_v}" >> $GITHUB_ENV
           # Python
-          echo "PY_VER=${python3 -V}" >> $GITHUB_ENV
-          echo "PIP_VER=${pip3 -V}" >> $GITHUB_ENV
+          py_v=`python3 -V`
+          echo "PY_VER=${py_v}" >> $GITHUB_ENV
+          pip_v=`pip3 -V`
+          echo "PIP_VER=${pip_v}" >> $GITHUB_ENV
           # NodeJS
-          echo "NODE_VER=${node -v}" >> $GITHUB_ENV
-          echo "NPM_VER=${npm -v}" >> $GITHUB_ENV
+          njs_v=`node -v`
+          echo "NODE_VER=${njs_v}" >> $GITHUB_ENV
+          npm_v=`npm -v`
+          echo "NPM_VER=${npm_v}" >> $GITHUB_ENV
 
       - name: prestep-summary
         run: |
