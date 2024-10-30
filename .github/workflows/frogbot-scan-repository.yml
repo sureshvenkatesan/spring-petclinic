@@ -29,13 +29,10 @@ jobs:
       - name: Software version
         run: |
           # Java
-          java_v=`java --version`
-          echo "JAVA_VER=${java_v}" >> $GITHUB_ENV
+          java --version
           # Python
-          py_v=`python3 -V`
-          echo "PY_VER=${py_v}" >> $GITHUB_ENV
-          pip_v=`pip3 -V`
-          echo "PIP_VER=${pip_v}" >> $GITHUB_ENV
+          python3 -V
+          pip3 -V
           # NodeJS
           njs_v=`node -v`
           echo "NODE_VER=${njs_v}" >> $GITHUB_ENV
@@ -46,11 +43,6 @@ jobs:
         run: |
           echo "# :frog: Prestep Summary :pushpin:" >> $GITHUB_STEP_SUMMARY
           echo " " >> $GITHUB_STEP_SUMMARY
-          echo " " >> $GITHUB_STEP_SUMMARY
-          echo " - JAVA Info: \n   ${{ env.JAVA_VER }} " >> $GITHUB_STEP_SUMMARY
-          echo " " >> $GITHUB_STEP_SUMMARY
-          echo " - Python Info: \n   ${{ env.PY_VER }} \n   ${{ env.PIP_VER }}" >> $GITHUB_STEP_SUMMARY
-          echo " -  " >> $GITHUB_STEP_SUMMARY
           echo " " >> $GITHUB_STEP_SUMMARY
           echo " - NodeJs Info: \n   node: ${{ env.NODE_VER }} \n   npm: ${{ env.NPM_VER }} " >> $GITHUB_STEP_SUMMARY
           echo " " >> $GITHUB_STEP_SUMMARY
