@@ -44,11 +44,27 @@ jobs:
           echo "# :frog: Prestep Summary :pushpin:" >> $GITHUB_STEP_SUMMARY
           echo " " >> $GITHUB_STEP_SUMMARY
           echo " " >> $GITHUB_STEP_SUMMARY
-          echo " - NodeJs Info: \n   node: ${{ env.NODE_VER }} \n   npm: ${{ env.NPM_VER }} " >> $GITHUB_STEP_SUMMARY
+          echo " - NodeJs Info: " >> $GITHUB_STEP_SUMMARY
+          echo "     - node: ${{ env.NODE_VER }} " >> $GITHUB_STEP_SUMMARY
+          echo "     npm: ${{ env.NPM_VER }} " >> $GITHUB_STEP_SUMMARY
           echo " " >> $GITHUB_STEP_SUMMARY
 
       - uses: actions/checkout@v4
 
+
+      - name: NodeJS upgrade
+        uses: actions/setup-node@v4  # ref: https://github.com/actions/setup-node
+        with:
+          node-version: 20
+
+      - name: After NodeJS upgrade
+        run: |
+          # NodeJS
+          njs_u_v=`node -v`
+          echo "NODE_VER=${njs_u_v}" >> $GITHUB_ENV
+          npm_u_v=`npm -v`
+          echo "NPM_VER=${npm_u_v}" >> $GITHUB_ENV
+          
       - uses: jfrog/frogbot@v2
         env:
           JF_URL: https://${{ vars.JF_NAME }}.jfrog.io

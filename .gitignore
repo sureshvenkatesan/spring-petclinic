@@ -59,3 +59,5 @@ _site/
 *.css
 !petclinic.css
 RBv2-*.json
+.gradle/
+.gradle/**
