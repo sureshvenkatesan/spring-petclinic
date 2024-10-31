@@ -175,15 +175,15 @@ jobs:
            sleep 20   # Sleeping for 20 seconds before executing the build publish seems to have resolved the build-scan issue. 
 
       - name: Build Scan status # https://jfrog.com/help/r/xray-rest-apis/build-scan-status
+        # jf xr curl /api/v1/build/status -H 'Content-Type: application/json' -d '{"name": "spring-petclinic", "number": "ga-gdl-xray-50" }'
         run: |
-          # jf xr curl /api/v1/build/status -H 'Content-Type: application/json' -d '{"name": "spring-petclinic", "number": "ga-gdl-xray-50" }'
           jf xr curl /api/v1/build/status -H 'Content-Type: application/json' -d '{"name": "${{ env.BUILD_NAME}}", "number": "${{ env.BUILD_ID}}" }'
 
       - name: Build Scan
         run: |
-          jf bs ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} --vuln --rescan --extended-table
+          jf bs ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} --extended-table
 
       - name: Build Scan V2  # https://jfrog.com/help/r/xray-rest-apis/scan-build-v2
+        # jf xr curl /api/v2/ci/build -H 'Content-Type: application/json' -d '{"build_name": "spring-petclinic", "build_number": "ga-gdl-xray-50","rescan":true }'
         run: |
-          # jf xr curl /api/v2/ci/build -H 'Content-Type: application/json' -d '{"build_name": "spring-petclinic", "build_number": "ga-gdl-xray-50","rescan":true }'
           jf xr curl /api/v2/ci/build -H 'Content-Type: application/json' -d '{"build_name": "${{ env.BUILD_NAME}}", "build_number": "${{ env.BUILD_ID}}", "rescan":true }'
