@@ -30,7 +30,7 @@ permissions:
   security-events: write # Required for uploading code scanning.
 jobs:
   securityPackage:
-    name: MVN Package
+    name: Security Package
     strategy:
       fail-fast: false
       matrix:
@@ -64,6 +64,7 @@ jobs:
           JFROG_CLI_BUILD_NUMBER: "${{ env.BUILD_ID}}"
           JFROG_CLI_LOG_LEVEL: "${{ env.JFROG_CLI_LOG_LEVEL }}"
         with:
+          version: 2.71.2
           oidc-provider-name: ${{ vars.JF_OIDC_PROVIDER_NAME }}
           disable-job-summary: ${{env.JOB_SUMMARY}}
           disable-auto-build-publish: ${{env.JOB_SUMMARY}}
