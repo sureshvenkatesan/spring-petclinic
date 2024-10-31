@@ -132,10 +132,6 @@ jobs:
         run: |
           jf audit --mvn --secrets --extended-table
 
-      - name: AUDIT - Secrets Detection
-        run: |
-          jf audit --mvn --secrets --extended-table
-
       - name: AUDIT - Multiple Secrets types such as tokens, generic password, ssh keys, etc
         run: |
           jf audit --mvn --secrets --validate-secrets --extended-table
@@ -154,7 +150,7 @@ jobs:
 
       - name: MVN - Create Build
         run: |
-          jf mvn install -DskipTests=true --build-name=${{ env.BUILD_NAME}} --build-number=${{ env.BUILD_ID}} --scan --detailed-summary
+          jf mvn install -DskipTests=true --build-name=${{ env.BUILD_NAME}} --build-number=${{ env.BUILD_ID}} --detailed-summary
 
 # Scan your Binaries: https://docs.jfrog-applications.jfrog.io/jfrog-applications/jfrog-cli/cli-for-jfrog-security/scan-your-binaries
       - name: SCAN - Licenses
