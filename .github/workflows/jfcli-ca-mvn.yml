@@ -154,7 +154,9 @@ jobs:
         run: |
            jf rt curl "/api/build/${{ env.BUILD_NAME}}/${{ env.BUILD_ID}}" -o $BUILD_INFO_JSON
            cat $BUILD_INFO_JSON
-
+# Sleep for 20 seconds
+      - name: Sleep for 20 seconds
+        run: sleep 20
 # Build Promote
       - name: Build promote
         env: 
