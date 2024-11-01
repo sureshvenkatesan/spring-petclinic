@@ -51,24 +51,23 @@ jobs:
 
       - uses: actions/checkout@v4
 
+      # - name: NodeJS upgrade
+      #   uses: actions/setup-node@v4  # ref: https://github.com/actions/setup-node
+      #   with:
+      #     node-version: 20
 
-      - name: NodeJS upgrade
-        uses: actions/setup-node@v4  # ref: https://github.com/actions/setup-node
-        with:
-          node-version: 20
-
-      - name: After NodeJS upgrade
-        run: |
-          # NodeJS
-          njs_u_v=`node -v`
-          echo "NODE_VER=${njs_u_v}" >> $GITHUB_ENV
-          npm_u_v=`npm -v`
-          echo "NPM_VER=${npm_u_v}" >> $GITHUB_ENV
+      # - name: After NodeJS upgrade
+      #   run: |
+      #     # NodeJS
+      #     njs_u_v=`node -v`
+      #     echo "NODE_VER=${njs_u_v}" >> $GITHUB_ENV
+      #     npm_u_v=`npm -v`
+      #     echo "NPM_VER=${npm_u_v}" >> $GITHUB_ENV
           
-      - uses: jfrog/frogbot@v2
+      - uses: jfrog/frogbot@v2    # ref: https://github.com/jfrog/frogbot
         env:
           JF_URL: https://${{ vars.JF_NAME }}.jfrog.io
-          JFROG_CLI_LOG_LEVEL: DEBUG
+          JFROG_CLI_LOG_LEVEL: "DEBUG"
           # [Mandatory]
           # The GitHub token is automatically generated for the job
           JF_GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -145,7 +144,7 @@ jobs:
 
           # [Optional, default: "TRUE"]
           # Fails the Frogbot task if any security issue is found.
-          # JF_FAIL: "FALSE"
+          JF_FAIL: "FALSE"
 
           # [Optional]
           # Frogbot will download the project dependencies if they're not cached locally. To download the
