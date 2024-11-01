@@ -30,7 +30,7 @@ permissions:
   security-events: write # Required for uploading code scanning.
 jobs:
   curationMvn:
-    if: ${{ github.event.comment.body == 'ca-mvn') || github.event.comment.body == 'curation') ||  github.event.comment.body == 'mvn') || github.event.comment.body == 'all' }}
+    if: ${{ github.event.comment.body == 'ca-mvn' || github.event.comment.body == 'curation' ||  github.event.comment.body == 'mvn' || github.event.comment.body == 'all' }}
     name: MVN Package
     strategy:
       fail-fast: false

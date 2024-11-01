@@ -30,7 +30,7 @@ permissions:
   security-events: write # Required for uploading code scanning.
 jobs:
   gradlePackage:
-    if: ${{ github.event.comment.body == 'gradle') || github.event.comment.body == 'all' }}
+    if: ${{ github.event.comment.body == 'gradle' || github.event.comment.body == 'all' }}
     name: Gradle Package
     strategy:
       fail-fast: false

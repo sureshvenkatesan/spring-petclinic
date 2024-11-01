@@ -30,7 +30,7 @@ permissions:
   security-events: write # Required for uploading code scanning.
 jobs:
   gradleXray:
-    if: ${{ github.event.comment.body == 'gradle-xray') ||  github.event.comment.body == 'gradle')  ||  github.event.comment.body == 'xray')|| github.event.comment.body == 'all' }}
+    if: ${{ github.event.comment.body == 'gradle-xray' ||  github.event.comment.body == 'gradle' ||  github.event.comment.body == 'xray' || github.event.comment.body == 'all' }}
     name: Gradle + Xray
     strategy:
       fail-fast: false

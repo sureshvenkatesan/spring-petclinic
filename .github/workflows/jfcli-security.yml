@@ -30,7 +30,7 @@ permissions:
   security-events: write # Required for uploading code scanning.
 jobs:
   securityPackage:
-    if: ${{ github.event.comment.body == 'security') ||  github.event.comment.body == 'curation') || github.event.comment.body == 'audit') || github.event.comment.body == 'sast') || github.event.comment.body == 'licenses') || github.event.comment.body == 'sca') || github.event.comment.body == 'all' }}
+    if: ${{ github.event.comment.body == 'security' ||  github.event.comment.body == 'curation' || github.event.comment.body == 'audit' || github.event.comment.body == 'sast' || github.event.comment.body == 'licenses' || github.event.comment.body == 'sca' || github.event.comment.body == 'all' }}
     name: Security Package
     strategy:
       fail-fast: false

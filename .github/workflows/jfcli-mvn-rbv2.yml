@@ -30,7 +30,7 @@ permissions:
   security-events: write # Required for uploading code scanning.
 jobs:
   mvnRbv2:
-    if: ${{ github.event.comment.body == 'mvn-rbv2') ||  github.event.comment.body == 'mvn') ||  github.event.comment.body == 'rbv2') || github.event.comment.body == 'all' }}
+    if: ${{ github.event.comment.body == 'mvn-rbv2' ||  github.event.comment.body == 'mvn' ||  github.event.comment.body == 'rbv2' || github.event.comment.body == 'all' }}
     name: MVN RBv2
     strategy:
       fail-fast: false

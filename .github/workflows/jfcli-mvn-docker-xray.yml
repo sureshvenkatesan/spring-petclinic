@@ -27,7 +27,7 @@ permissions:
   security-events: write # Required for uploading code scanning.
 jobs:
   mvnDockerXray:
-    if: ${{ github.event.comment.body == 'mvn-docker-xray') ||  github.event.comment.body == 'mvn') ||  github.event.comment.body == 'xray') ||  github.event.comment.body == 'docker') || github.event.comment.body == 'all' }}
+    if: ${{ github.event.comment.body == 'mvn-docker-xray' ||  github.event.comment.body == 'mvn' ||  github.event.comment.body == 'xray' ||  github.event.comment.body == 'docker' || github.event.comment.body == 'all' }}
     name: MVN + Docker + Xray
     strategy:
       fail-fast: false
