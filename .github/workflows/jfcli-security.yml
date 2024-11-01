@@ -164,6 +164,8 @@ jobs:
       - name: Build Publish
         run: |
           jf rt bp ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} --detailed-summary=true
+          
+          sleep 20   # Sleeping for 20 seconds before executing the build publish seems to have resolved the build-scan issue. 
 
       - name: Query build info
         env: 
@@ -171,8 +173,6 @@ jobs:
         run: |
            jf rt curl "/api/build/${{ env.BUILD_NAME}}/${{ env.BUILD_ID}}" -o $BUILD_INFO_JSON
            cat $BUILD_INFO_JSON
-
-           sleep 20   # Sleeping for 20 seconds before executing the build publish seems to have resolved the build-scan issue. 
 
       - name: Build Scan status # https://jfrog.com/help/r/xray-rest-apis/build-scan-status
         # jf xr curl /api/v1/build/status -H 'Content-Type: application/json' -d '{"name": "spring-petclinic", "number": "ga-gdl-xray-50" }'
