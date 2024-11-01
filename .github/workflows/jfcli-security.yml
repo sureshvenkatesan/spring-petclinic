@@ -6,8 +6,8 @@ on:
 # TURN-OFF on every push 
   push:
     branches: 
-    #  - nobuildonpush
-      - main
+      - nobuildonpush
+    #  - main
     paths-ignore: # When the below folders are checked-in, the GitHub Actions job will not start.
     #  - '.github/**'
       - 'target/**'
@@ -30,6 +30,7 @@ permissions:
   security-events: write # Required for uploading code scanning.
 jobs:
   securityPackage:
+    if: ${{ github.event.comment.body == 'security') ||  github.event.comment.body == 'curation') || github.event.comment.body == 'audit') || github.event.comment.body == 'sast') || github.event.comment.body == 'licenses') || github.event.comment.body == 'sca') || github.event.comment.body == 'all' }}
     name: Security Package
     strategy:
       fail-fast: false
@@ -183,7 +184,7 @@ jobs:
         run: |
           jf bs ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} --extended-table --fail=false
 
-      - name: Build Scan V2  # https://jfrog.com/help/r/xray-rest-apis/scan-build-v2
-        # jf xr curl /api/v2/ci/build -H 'Content-Type: application/json' -d '{"build_name": "spring-petclinic", "build_number": "ga-gdl-xray-50","rescan":true }'
-        run: |
-          jf xr curl /api/v2/ci/build -H 'Content-Type: application/json' -d '{"build_name": "${{ env.BUILD_NAME}}", "build_number": "${{ env.BUILD_ID}}", "rescan":true }'
+      # - name: Build Scan V2  # https://jfrog.com/help/r/xray-rest-apis/scan-build-v2
+      #   # jf xr curl /api/v2/ci/build -H 'Content-Type: application/json' -d '{"build_name": "spring-petclinic", "build_number": "ga-gdl-xray-50","rescan":true }'
+      #   run: |
+      #     jf xr curl /api/v2/ci/build -H 'Content-Type: application/json' -d '{"build_name": "${{ env.BUILD_NAME}}", "build_number": "${{ env.BUILD_ID}}", "rescan":true }'

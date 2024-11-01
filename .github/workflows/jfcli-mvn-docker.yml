@@ -3,12 +3,12 @@ on:
 # TURN-OFF on every push 
   push:
     branches: 
-    #  - nobuildonpush
-      - main
+      - nobuildonpush
+    #  - main
     paths-ignore: # When the below folders are checked-in, the GitHub Actions job will not start.
     #  - '.github/**'
       - 'target/**'
-      - 'gradle/**'
+      - '/**'
       - '.mvn/**'
       - '.devcontainer/**'
       - '.jfrog/**'
@@ -27,6 +27,7 @@ permissions:
   security-events: write # Required for uploading code scanning.
 jobs:
   mvnDocker:
+    if: ${{ github.event.comment.body == 'mvn-docker') ||  github.event.comment.body == 'mvn') ||  github.event.comment.body == 'docker') || github.event.comment.body == 'all' }}s
     name: MVN + Docker
     strategy:
       fail-fast: false

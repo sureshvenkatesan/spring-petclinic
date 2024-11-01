@@ -6,8 +6,8 @@ on:
 # TURN-OFF on every push 
   push:
     branches: 
-    #  - nobuildonpush
-      - main
+      - nobuildonpush
+    #  - main
     paths-ignore: # When the below folders are checked-in, the GitHub Actions job will not start.
     #  - '.github/**'
       - 'target/**'
@@ -29,7 +29,8 @@ permissions:
   contents: read
   security-events: write # Required for uploading code scanning.
 jobs:
-  mvnPackage:
+  curationMvn:
+    if: ${{ github.event.comment.body == 'ca-mvn') || github.event.comment.body == 'curation') ||  github.event.comment.body == 'mvn') || github.event.comment.body == 'all' }}
     name: MVN Package
     strategy:
       fail-fast: false
