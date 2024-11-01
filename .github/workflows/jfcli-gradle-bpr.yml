@@ -1,13 +1,13 @@
 # This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-name: Parallel job to build MVN and Gradle
+name: JF-CLI with Gradle
 on:
 # TURN-OFF on every push 
   push:
     branches: 
-      - nobuildonpush
-    #  - main
+    #  - nobuildonpush
+      - main
     paths-ignore: # When the below folders are checked-in, the GitHub Actions job will not start.
     #  - '.github/**'
       - 'target/**'
@@ -29,10 +29,8 @@ permissions:
   contents: read
   security-events: write # Required for uploading code scanning.
 jobs:
-  prestep:
-    name: Pre Step
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
+  gradlePackage:
+    name: Gradle Package
     strategy:
       fail-fast: false
       matrix:
@@ -40,14 +38,16 @@ jobs:
         java: [17 ]
         include:
           - language: ['java-kotlin']
-            build-mode: none 
+            build-mode: none
     env:  
       JAVA_PROVIDER: 'corretto'
       JAVA_VERSION: '17'
       JF_RT_URL: https://${{ vars.JF_NAME }}.jfrog.io
+      RT_REPO_GRADLE_VIRTUAL: 'krishnam-gradle-virtual'
       JOB_SUMMARY: false
       JFROG_CLI_LOG_LEVEL: ${{vars.JFROG_CLI_LOG_LEVEL}} # DEBUG, INFO, WARN, ERROR
       BUILD_NAME: 'spring-petclinic'
+      BUILD_ID: "ga-gdl-bpr-${{ github.run_number }}" # ref: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#github-context
     runs-on: ${{ matrix.os }}
     timeout-minutes: 20   # ref  https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idtimeout-minutes
     steps:
@@ -57,8 +57,8 @@ jobs:
         id: setup-cli
         env:
           JF_URL: ${{env.JF_RT_URL}}
-          JFROG_CLI_RELEASES_REPO: '${{ env.JF_RT_URL }}/artifactory/${{ env.RT_REPO_MVN_VIRTUAL}}' 
-          JFROG_CLI_EXTRACTORS_REMOTE: '${{ env.JF_RT_URL }}/artifactory/${{ env.RT_REPO_MVN_VIRTUAL}}'
+          JFROG_CLI_RELEASES_REPO: '${{ env.JF_RT_URL }}/artifactory/${{ env.RT_REPO_GRADLE_VIRTUAL}}' 
+          JFROG_CLI_EXTRACTORS_REMOTE: '${{ env.JF_RT_URL }}/artifactory/${{ env.RT_REPO_GRADLE_VIRTUAL}}'
           JF_GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           oidc-provider-name: ${{ vars.JF_OIDC_PROVIDER_NAME }}
@@ -72,8 +72,6 @@ jobs:
         with:
           distribution: ${{ env.JAVA_PROVIDER }} # corretto
           java-version: ${{ env.JAVA_VERSION }}  # 17
-          cache: 'maven'
-          cache-dependency-path: 'pom.xml'
 
       - name: Setup Gradle    # ref https://docs.github.com/en/enterprise-cloud@latest/actions/use-cases-and-examples/building-and-testing/building-and-testing-java-with-gradle
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
@@ -88,6 +86,8 @@ jobs:
           java -version
           # MVN
           mvn -version
+          # Gradle
+          gradle -v
           # Docker
           docker -v
           # Python
@@ -96,8 +96,23 @@ jobs:
           # jf config
           jf config show
 
+      - name: Config jf with gradle repos
+        run: |
           export JFROG_CLI_LOG_LEVEL=${{ env.JFROG_CLI_LOG_LEVEL }}
           export JFROG_CLI_LOG_TIMESTAMP=DATE_AND_TIME
+          jf gradlec --repo-deploy ${{ env.RT_REPO_GRADLE_VIRTUAL}} --repo-resolve ${{ env.RT_REPO_GRADLE_VIRTUAL}} --repo-deploy ${{ env.RT_REPO_GRADLE_VIRTUAL}}
+
+      - name: list folder
+        run: |
+          pwd
+          ls -lrta /home/runner/work/spring-petclinic/spring-petclinic
+
+          echo "OIDC_PROVIDER_NAME = ${{ vars.JF_OIDC_PROVIDER_NAME }}"
+          echo "GITHUB_REPOSITORY = $GITHUB_REPOSITORY"
+          echo "GITHUB_SHA = $GITHUB_SHA"
+          echo "GITHUB_REPOSITORY_ID = $GITHUB_REPOSITORY_ID"
+
+          cd /home/runner/work/spring-petclinic/spring-petclinic
 
       - name: prestep-summary
         run: |
@@ -107,45 +122,41 @@ jobs:
           echo " " >> $GITHUB_STEP_SUMMARY
           echo " - Installed JFrog CLI [${jfcliv}](https://jfrog.com/getcli/) and Java [${{ env.JAVA_PROVIDER }}](https://github.com/actions/setup-java) v${{ env.JAVA_VERSION }} " >> $GITHUB_STEP_SUMMARY
           echo " - Configured the JFrog Cli with SaaS Artifactory OIDC integration  " >> $GITHUB_STEP_SUMMARY
-  
-  mvnPackage:
-    name: MVN Package
-    needs: prestep
-    strategy:
-      matrix: ${{ fromJson(needs.prestep.outputs.matrix) }}
-    runs-on: ubuntu-latest
-    env:
-      RT_REPO_MVN_VIRTUAL: 'krishnam-mvn-virtual'
-      BUILD_ID: "ga-llmvn-${{ github.run_number }}" # ref: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#github-context
-    steps:
-      - name: Config jf with mvn repos
-        run: |
-          jf mvnc --global --repo-resolve-releases ${{ env.RT_REPO_MVN_VIRTUAL}} --repo-resolve-snapshots ${{ env.RT_REPO_MVN_VIRTUAL}}
-
+# Package
       - name: Create Build
         run: |
-          jf mvn clean install -DskipTests=true --build-name=${{ env.BUILD_NAME}} --build-number=${{ env.BUILD_ID}} --detailed-summary=true 
+          jf gradle clean artifactoryPublish -x test -b ./build.gradle --build-name=${{ env.BUILD_NAME}} --build-number=${{ env.BUILD_ID}} 
+
+      - name: build publish env vars   # These properties were captured in Builds >> spring-petclinic >> version >> Environment tab
+        run: |
+          export e_env="e_demo" e_org="e_ps" e_team="e_arch" e_build="gradle" e_job="github-action" e_product="artifactory" e_features="package,buildinfo"
+
+ # Build Info
+    # Executive Order: 
+    #       https://www.whitehouse.gov/briefing-room/presidential-actions/2021/05/12/executive-order-on-improving-the-nations-cybersecurity/
+    #       https://www.nist.gov/itl/executive-order-14028-improving-nations-cybersecurity
+    # US Dept of Commerce: https://www.ntia.gov/page/software-bill-materials
+    # US Cyber Defence Agency: https://www.cisa.gov/sbom
+    # NIST: https://www.nist.gov/itl/executive-order-14028-improving-nations-cybersecurity/software-security-supply-chains-software-1
+    # NITA: https://www.ntia.gov/page/software-bill-materials 
+      - name: Collect env
+        run: jf rt bce ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} 
+ 
+      - name: Add VCS info
+        run: jf rt bag ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} 
 
       - name: Build Publish
         run: jf rt bp ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} --detailed-summary=true
 
-  gradlePackage:
-    name: Gradle Package
-    needs: prestep
-    strategy:
-      matrix: ${{ fromJson(needs.prestep.outputs.matrix) }}
-    runs-on: ubuntu-latest
-    env:
-      RT_REPO_GRADLE_VIRTUAL: 'krishnam-gradle-virtual'
-      BUILD_ID: "ga-llgdl-${{ github.run_number }}" # ref: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#github-context
-    steps:
-      - name: Config jf with gradle repos
-        run: |
-          jf gradlec --repo-deploy ${{ env.RT_REPO_GRADLE_VIRTUAL}} --repo-resolve ${{ env.RT_REPO_GRADLE_VIRTUAL}} --repo-deploy ${{ env.RT_REPO_GRADLE_VIRTUAL}}
+# Build Promote
+    ## bpr: build-promote - https://docs.jfrog-applications.jfrog.io/jfrog-applications/jfrog-cli/cli-for-jfrog-artifactory/build-integration#promoting-a-build
+    # Builds >> spring-petclinic >> BUILD_ID >> Release History 
+    # Builds >> spring-petclinic >> BUILD_ID >> Build Info JSON at statuses 
+      - name: Build Promote DEV - to QA
+        run: jf rt build-promote ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} 'krishnam-mvn-qa-local' --status='QA candidate' --comment='petclinic is now QA candidate and hand over for regression test' --props="maintainer=ps;stage=qa"
 
-      - name: Create Build
-        run: |
-           jf gradle clean artifactoryPublish -x test -b ./build.gradle --build-name=${{ env.BUILD_NAME}} --build-number=${{ env.BUILD_ID}}  
+      - name: Build Promote - QA to PROD
+        run: jf rt build-promote ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} 'krishnam-mvn-prod-local' --status='Prod release' --comment='petclinic is now Prod rel' --props="maintainer=ps;stage=prod"
 
-      - name: Build Publish
-        run: jf rt bp ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} --detailed-summary=true
+      - name: Query Build
+        run: jf rt curl "/api/build/${{ env.BUILD_NAME}}/${{ env.BUILD_ID}}"

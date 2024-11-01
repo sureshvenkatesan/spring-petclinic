@@ -66,7 +66,7 @@ echo "\n\n**** Build Promote: QA2PROD ****\n\n"
 jf rt build-promote ${BUILD_NAME} ${BUILD_ID} 'krishnam-mvn-dev-local' --status='Junk release' --comment='petclinic is now JUNK rel' --copy=true --props="maintainer=ps;stage=notapplicable"
 
 echo "\n\n**** Query build ****\n\n"
-jf rt curl "/api/build/spring-petclinic/cmd.gdl.bpr.2024-10-28-22-08"
-
+# jf rt curl "/api/build/spring-petclinic/cmd.gdl.bpr.2024-10-28-22-08"
+jf rt curl "/api/build/${BUILD_NAME}/${BUILD_ID}"
 
 echo "\n\n**** DONE ****\n\n"
