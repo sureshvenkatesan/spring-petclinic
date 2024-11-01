@@ -17,7 +17,6 @@ permissions:
   id-token: write
 jobs:
   jfrog-bot-scan:
-    if: ${{ github.event.comment.body == 'frogbot' ||  github.event.comment.body == 'security' || github.event.comment.body == 'all' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
