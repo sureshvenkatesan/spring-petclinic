@@ -43,10 +43,10 @@ jobs:
       JAVA_PROVIDER: 'corretto'
       JAVA_VERSION: '17'
       JF_RT_URL: https://${{ vars.JF_NAME }}.jfrog.io
-      RT_REPO_GRADLE_VIRTUAL: 'krishnam-gradle-virtual'
+      RT_REPO_GRADLE_VIRTUAL: 'app-gradle-virtual'
       JOB_SUMMARY: false
       JFROG_CLI_LOG_LEVEL: ${{vars.JFROG_CLI_LOG_LEVEL}} # DEBUG, INFO, WARN, ERROR
-      BUILD_NAME: 'spring-petclinic'
+      BUILD_NAME: 'sv-spring-petclinic'
       BUILD_ID: "ga-gdl-${{ github.run_number }}" # ref: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#github-context
     runs-on: ${{ matrix.os }}
     timeout-minutes: 20   # ref  https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idtimeout-minutes
@@ -160,4 +160,6 @@ jobs:
         run: |
            jf rt curl "/api/build/${{ env.BUILD_NAME}}/${{ env.BUILD_ID}}" -o $BUILD_INFO_JSON
            cat $BUILD_INFO_JSON
-           
+      
+      - name: Promote the build
+        run: jf rt bpr ${{ env.BUILD_NAME}} ${{ env.BUILD_ID}} app-gradle-rc-local --status='release candidate' --comment='webservice is now release candidate' --copy=true --props="maintainer=svenkat;stage=staging"
